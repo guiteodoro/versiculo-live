@@ -75,13 +75,14 @@ function enviarEstado(estado) {
   estadoAtual = { ...estado, ativo };
   log.info(`estado: ${estado.estado}${estado.arroba ? ` @${estado.arroba}` : ''}` +
     `${estado.espectadores != null ? ` · ${estado.espectadores} espectadores` : ''}` +
-    `${estado.mensagem ? ` · ${estado.mensagem}` : ''}`);
+    `${estado.mensagem ? ` · ${estado.mensagem}` : ''}` +
+    `${ativo ? ' [ativo]' : ''}`);
   enviar(controle, 'vl:aoEstado', estadoAtual);
 }
 
 function aoEstadoConexao(estado) {
   // @ inválido e live terminada não tentam de novo; desligado é fim.
-  if (estado.estado === 'desligado' || (estado.estado === 'erro' && !estado.arroba)) ativo = false;
+  if (['desligado', 'terminou'].includes(estado.estado) || (estado.estado === 'erro' && !estado.arroba)) ativo = false;
   enviarEstado(estado);
 }
 
@@ -320,6 +321,12 @@ function autoteste() {
     [3000, () => conectar('@@@')],
   ];
   if (ARROBA_AUTOTESTE) passos.push([5000, () => conectar(ARROBA_AUTOTESTE)]);
+  // fim de live simulado (a conexão real emite isto e para de tentar): o botão deve voltar a Conectar
+  passos.push([9000, async () => {
+    await desconectar();
+    ativo = true;
+    aoEstadoConexao({ estado: 'terminou', arroba: ARROBA_AUTOTESTE ?? '', mensagem: 'A live terminou' });
+  }]);
   // o que a janela de controle mostra, para conferir pelo log
   const conferir = async () => {
     if (!controle) return;
@@ -330,7 +337,7 @@ function autoteste() {
     })`);
     log.info(`autoteste: controle ${JSON.stringify(visto)}`);
   };
-  for (const ms of [2500, 4000, 15000]) setTimeout(() => conferir().catch((e) => log.erro('autoteste', e)), ms);
+  for (const ms of [2500, 4000, 8000, 15000]) setTimeout(() => conferir().catch((e) => log.erro('autoteste', e)), ms);
   controle?.webContents.on('console-message', (e) => log.info(`autoteste: console ${e.level}: ${e.message}`));
   for (const [ms, passo] of passos) setTimeout(() => seguro('autoteste', passo), ms);
   setTimeout(() => {

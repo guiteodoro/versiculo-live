@@ -17,9 +17,9 @@ const $ = (id) => document.getElementById(id);
 let estado = { estado: 'desligado', arroba: '', ativo: false };
 let fila = 0;
 
-// desligado ou erro que não tenta de novo → Conectar; qualquer outro → Desconectar
+// desligado, live terminada ou erro que não tenta de novo → Conectar; qualquer outro → Desconectar
 function podeConectar() {
-  return estado.estado === 'desligado' || (estado.estado === 'erro' && !estado.ativo);
+  return estado.estado === 'desligado' || estado.estado === 'terminou' || (estado.estado === 'erro' && !estado.ativo);
 }
 
 function textoStatus() {
