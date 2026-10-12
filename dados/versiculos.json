@@ -1,0 +1,137 @@
+{
+  "traducao": "exemplo — substituir na Task 13",
+  "temas": [
+    {
+      "id": "ansiedade",
+      "palavras": [
+        "ansiedade",
+        "ansioso",
+        "ansiosa",
+        "medo",
+        "preocupacao",
+        "angustia"
+      ],
+      "versiculos": [
+        {
+          "ref": "Filipenses 4:6",
+          "texto": "[exemplo] Não se preocupe com nada; leve tudo a Deus em oração."
+        },
+        {
+          "ref": "1 Pedro 5:7",
+          "texto": "[exemplo] Entregue a Deus as suas aflições, pois ele cuida de você."
+        },
+        {
+          "ref": "Mateus 6:34",
+          "texto": "[exemplo] Não sofra pelo amanhã; cada dia tem os seus próprios cuidados."
+        }
+      ]
+    },
+    {
+      "id": "familia",
+      "palavras": [
+        "familia",
+        "filhos",
+        "filho",
+        "filha",
+        "casamento",
+        "esposa",
+        "marido",
+        "mae",
+        "pai"
+      ],
+      "versiculos": [
+        {
+          "ref": "Josué 24:15",
+          "texto": "[exemplo] Eu e a minha casa serviremos ao Senhor."
+        },
+        {
+          "ref": "Salmos 127:3",
+          "texto": "[exemplo] Os filhos são uma herança que vem do Senhor."
+        },
+        {
+          "ref": "Provérbios 22:6",
+          "texto": "[exemplo] Eduque a criança no caminho certo, e ela não se desviará dele."
+        }
+      ]
+    },
+    {
+      "id": "gratidao",
+      "palavras": [
+        "gratidao",
+        "obrigado",
+        "obrigada",
+        "gracas",
+        "agradecer",
+        "agradecido"
+      ],
+      "versiculos": [
+        {
+          "ref": "1 Tessalonicenses 5:18",
+          "texto": "[exemplo] Em tudo dê graças, pois essa é a vontade de Deus para você."
+        },
+        {
+          "ref": "Salmos 107:1",
+          "texto": "[exemplo] Dê graças ao Senhor, porque ele é bom e o seu amor dura para sempre."
+        },
+        {
+          "ref": "Colossenses 3:15",
+          "texto": "[exemplo] Que a paz de Cristo governe o seu coração, e seja grato."
+        }
+      ]
+    },
+    {
+      "id": "geral",
+      "palavras": [],
+      "versiculos": [
+        {
+          "ref": "Salmos 23:1",
+          "texto": "[exemplo] O Senhor é o meu pastor; nada me faltará."
+        },
+        {
+          "ref": "Jeremias 29:11",
+          "texto": "[exemplo] Deus tem planos de paz e de esperança para a sua vida."
+        },
+        {
+          "ref": "Isaías 41:10",
+          "texto": "[exemplo] Não tenha medo, pois estou com você, diz o Senhor."
+        }
+      ]
+    },
+    {
+      "id": "boas-vindas",
+      "palavras": [],
+      "versiculos": [
+        {
+          "ref": "Salmos 122:1",
+          "texto": "[exemplo] Fiquei alegre quando me disseram: vamos à casa do Senhor."
+        },
+        {
+          "ref": "Romanos 15:7",
+          "texto": "[exemplo] Acolham uns aos outros, como Cristo os acolheu."
+        },
+        {
+          "ref": "Hebreus 13:2",
+          "texto": "[exemplo] Não deixem de receber bem as visitas; é uma honra recebê-las."
+        }
+      ]
+    },
+    {
+      "id": "comunidade",
+      "palavras": [],
+      "versiculos": [
+        {
+          "ref": "Hebreus 10:24",
+          "texto": "[exemplo] Vamos nos incentivar uns aos outros ao amor e às boas ações."
+        },
+        {
+          "ref": "Eclesiastes 4:9",
+          "texto": "[exemplo] Melhor ser dois do que um, pois juntos têm melhor recompensa."
+        },
+        {
+          "ref": "Atos 2:42",
+          "texto": "[exemplo] Eles permaneciam unidos no ensino, na comunhão e nas orações."
+        }
+      ]
+    }
+  ]
+}
