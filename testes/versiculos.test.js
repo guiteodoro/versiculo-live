@@ -42,3 +42,56 @@ test('escolher devolve versículo do tema do comentário; doTema desconhecido ca
   assert.ok(a.ref && a.texto);
   assert.equal(v.doTema('nao-existe').tema, 'geral');
 });
+
+// ---- dados/versiculos.json (Bíblia Livre) ----
+import { readFileSync } from 'node:fs';
+const DADOS = JSON.parse(readFileSync(new URL('../dados/versiculos.json', import.meta.url), 'utf8'));
+const BUSCAVEIS = ['ansiedade', 'medo', 'familia', 'cura', 'tristeza', 'gratidao', 'fe', 'perdao', 'provisao', 'forca', 'paz', 'salvacao'];
+
+test('dados/versiculos.json: válido, com os 15 temas na ordem e a tradução BLIVRE', () => {
+  assert.deepEqual(validarDados(DADOS), { ok: true });
+  assert.deepEqual(DADOS.temas.map((t) => t.id), [...BUSCAVEIS, 'geral', 'boas-vindas', 'comunidade']);
+  assert.match(DADOS.traducao, /BLIVRE/);
+  assert.match(DADOS.atribuicao, /Diego Santos/);
+});
+test('dados/versiculos.json: quantidades por tema', () => {
+  const porId = Object.fromEntries(DADOS.temas.map((t) => [t.id, t]));
+  for (const id of BUSCAVEIS) {
+    const t = porId[id];
+    assert.ok(t.versiculos.length >= 10 && t.versiculos.length <= 15, `${id}: ${t.versiculos.length} versículos`);
+    assert.ok(t.palavras.length >= 8 && t.palavras.length <= 15, `${id}: ${t.palavras.length} palavras`);
+  }
+  assert.ok(porId.geral.versiculos.length >= 30);
+  assert.ok(porId['boas-vindas'].versiculos.length >= 10);
+  assert.ok(porId.comunidade.versiculos.length >= 10);
+});
+test('dados/versiculos.json: refs únicas e textos curtos', () => {
+  const todos = DADOS.temas.flatMap((t) => t.versiculos);
+  const refs = todos.map((v) => v.ref);
+  assert.equal(new Set(refs).size, refs.length);
+  for (const v of todos) assert.ok(Array.from(v.texto).length <= 280, `${v.ref} passa de 280`);
+  for (const v of DADOS.temas.find((t) => t.id === 'boas-vindas').versiculos) {
+    assert.ok(Array.from(v.texto).length <= 120, `${v.ref} (boas-vindas) passa de 120`);
+  }
+});
+test('dados/versiculos.json: comentários vão para o tema certo', () => {
+  const v = criarVersiculos(DADOS);
+  const casos = {
+    'estou com muita ansiedade': 'ansiedade',
+    'sou grato a Deus': 'gratidao',
+    'orem pela saúde da minha mãe': 'cura',
+    'tenho medo do futuro': 'medo',
+    'orem pelos meus filhos': 'familia',
+    'estou muito triste': 'tristeza',
+    'perdi o emprego': 'provisao',
+    'Deus me perdoa': 'perdao',
+    'boa noite': 'geral',
+    'boa noite irmãos': 'geral',
+    'amém': 'geral',
+    'oi': 'geral',
+    'salve galera': 'geral',
+    'Deus abençoe': 'geral',
+    'por favor': 'geral',
+  };
+  for (const [texto, tema] of Object.entries(casos)) assert.equal(v.temaDe(texto), tema, texto);
+});

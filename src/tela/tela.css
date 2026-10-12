@@ -266,3 +266,18 @@ body {
 }
 .faixa .chegou { overflow-wrap: anywhere; }
 .faixa .verso { margin: .8vh 0 0; font-size: 3.1vh; line-height: 1.35; opacity: .9; }
+
+/* ---- crédito da tradução (CC BY 4.0) ----
+   Na faixa livre abaixo do "a seguir" (que fica a var(--margem) do fundo). */
+
+#credito {
+  position: absolute;
+  right: var(--margem);
+  bottom: .9vh;
+  z-index: 5;
+  font-size: 1.6vh;
+  line-height: 1;
+  letter-spacing: .12em;
+  opacity: .35;
+  pointer-events: none;
+}

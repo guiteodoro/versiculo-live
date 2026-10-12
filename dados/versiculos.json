@@ -1,5 +1,6 @@
 {
-  "traducao": "exemplo — substituir na Task 13",
+  "traducao": "Bíblia Livre (BLIVRE) — CC BY 4.0",
+  "atribuicao": "Todas as Escrituras em português citadas são da Bíblia Livre (BLIVRE), Copyright © Diego Santos, Mario Sérgio e Marco Teles, fevereiro de 2018. Licença Creative Commons Atribuição 4.0 Brasil.",
   "temas": [
     {
       "id": "ansiedade",
@@ -7,22 +8,157 @@
         "ansiedade",
         "ansioso",
         "ansiosa",
-        "medo",
+        "ansiosos",
+        "preocupado",
+        "preocupada",
         "preocupacao",
-        "angustia"
+        "angustia",
+        "angustiado",
+        "angustiada",
+        "nervoso",
+        "nervosa",
+        "aflito",
+        "aflita",
+        "panico"
       ],
       "versiculos": [
         {
           "ref": "Filipenses 4:6",
-          "texto": "[exemplo] Não se preocupe com nada; leve tudo a Deus em oração."
+          "texto": "Não estejais ansiosos por coisa alguma; mas em tudo, por meio de orações e súplicas com ações de gratidão, sejam os vossos pedidos conhecidos por Deus;"
+        },
+        {
+          "ref": "Filipenses 4:7",
+          "texto": "e a paz de Deus, que excede todo entendimento, guardará os vossos corações e as vossas mentes em Cristo Jesus."
         },
         {
           "ref": "1 Pedro 5:7",
-          "texto": "[exemplo] Entregue a Deus as suas aflições, pois ele cuida de você."
+          "texto": "lançando sobre ele toda a vossa ansiedade; porque ele tem cuidado de vós."
         },
         {
           "ref": "Mateus 6:34",
-          "texto": "[exemplo] Não sofra pelo amanhã; cada dia tem os seus próprios cuidados."
+          "texto": "Não andeis, pois, ansiosos pelo dia de amanhã, porque o amanhã cuidará de si mesmo. Basta a cada dia o seu mal."
+        },
+        {
+          "ref": "Mateus 11:28",
+          "texto": "Vinde a mim todos vós que estais cansados e sobrecarregados, e eu vos farei descansar."
+        },
+        {
+          "ref": "Salmos 55:22",
+          "texto": "Entrega tuas preocupações ao SENHOR, e ele te sustentará; ele não permitirá que o justo fique caído para sempre."
+        },
+        {
+          "ref": "Salmos 94:19",
+          "texto": "Quando minhas preocupações se multiplicavam dentro de mim, teus consolos confortaram a minha alma."
+        },
+        {
+          "ref": "Isaías 26:3",
+          "texto": "Tu guardarás em completa paz aquele que tem firme entendimento, pois ele confia em ti."
+        },
+        {
+          "ref": "João 14:1",
+          "texto": "Não se perturbe vosso coração; credes em Deus, crede também em mim."
+        },
+        {
+          "ref": "Salmos 46:10",
+          "texto": "Ficai quietos, e sabei que eu sou Deus; eu serei exaltado entre as nações; serei exaltado sobre a terra."
+        },
+        {
+          "ref": "Provérbios 3:5-6",
+          "texto": "Confia no SENHOR com todo o teu coração; e não te apoies em teu próprio entendimento. Dá reconhecimento a ele em todas os teus caminhos; e ele endireitará tuas veredas."
+        },
+        {
+          "ref": "Salmos 37:5",
+          "texto": "Entrega o teu caminho ao SENHOR; confia nele, e ele agirá,"
+        },
+        {
+          "ref": "Salmos 62:1",
+          "texto": "Certamente minha alma se aquieta por causa de Deus; dele vem minha salvação."
+        },
+        {
+          "ref": "Salmos 57:1",
+          "texto": "Tem misericórdia de mim, ó Deus, tem misericórdia de mim; porque minha alma confia em ti, e eu me refugio sob a sombra de tuas asas, até que os meus problemas passem de mim."
+        }
+      ]
+    },
+    {
+      "id": "medo",
+      "palavras": [
+        "medo",
+        "medos",
+        "medroso",
+        "medrosa",
+        "assustado",
+        "assustada",
+        "terror",
+        "pesadelo",
+        "pesadelos",
+        "inseguro",
+        "insegura",
+        "perigo",
+        "ameaca",
+        "receio",
+        "escuro"
+      ],
+      "versiculos": [
+        {
+          "ref": "Isaías 41:10",
+          "texto": "Não temas, porque eu estou contigo; não te assombres, porque eu sou teu Deus. Eu te fortaleço, te ajudo, e te sustento com a minha mão direita de justiça."
+        },
+        {
+          "ref": "Josué 1:9",
+          "texto": "Olha que te mando que te esforces e sejas valente: não temas nem desmaies, porque o SENHOR teu Deus será contigo onde quer que fores."
+        },
+        {
+          "ref": "Salmos 27:1",
+          "texto": "O SENHOR é minha luz e minha salvação; a quem temerei? O SENHOR é a força da minha vida; de quem terei medo?"
+        },
+        {
+          "ref": "Salmos 56:3",
+          "texto": "No dia em que eu tiver medo, eu confiarei em ti."
+        },
+        {
+          "ref": "Salmos 23:4",
+          "texto": "Ainda que eu venha a andar pelo vale da sombra da morte, não temerei mal algum, porque tu estás comigo; tua vara e teu cajado me consolam."
+        },
+        {
+          "ref": "2 Timóteo 1:7",
+          "texto": "Pois Deus não nos deu espírito de medo; mas sim de força, de amor, e de moderação."
+        },
+        {
+          "ref": "Deuteronômio 31:8",
+          "texto": "E o SENHOR é o que vai diante de ti; ele será contigo, não te deixará, nem te desamparará; não temas, nem te intimides."
+        },
+        {
+          "ref": "Salmos 34:4",
+          "texto": "Busquei ao SENHOR. Ele me respondeu, e me livrou de todos os meus temores."
+        },
+        {
+          "ref": "Salmos 118:6",
+          "texto": "O SENHOR está comigo, não temerei; o que poderá me fazer o homem?"
+        },
+        {
+          "ref": "Hebreus 13:6",
+          "texto": "De maneira que devemos ter a confiança de dizer: O Senhor é meu ajudador; não temerei o que o ser humano poderá fazer a mim."
+        },
+        {
+          "ref": "Salmos 91:1-2",
+          "texto": "Aquele que mora no esconderijo do Altíssimo, à sombra do Todo-Poderoso habitará. Direi ao SENHOR: Tu és meu refúgio e minha fortaleza; Deus meu, em quem confio."
+        },
+        {
+          "ref": "Salmos 91:5",
+          "texto": "Não terás medo do terror da noite, nem da flecha que voa de dia;"
+        },
+        {
+          "ref": "1 João 4:18",
+          "texto": "No amor não há medo; pelo contrário, o perfeito amor expulsa o medo; pois o medo está relacionado ao castigo; e o que teme não está aperfeiçoado em amor."
+        },
+        {
+          "ref": "Marcos 5:36",
+          "texto": "Mas Jesus, assim que ouviu essa palavra que havia sido falada, disse ao líder de sinagoga: Não temas; crê somente."
+        },
+        {
+          "ref": "Isaías 41:13",
+          "texto": "Porque eu, o SENHOR teu Deus, te seguro pela tua mão direita, e te digo: Não temas; eu te ajudo."
         }
       ]
     },
@@ -30,27 +166,241 @@
       "id": "familia",
       "palavras": [
         "familia",
-        "filhos",
+        "familias",
+        "familiares",
         "filho",
         "filha",
-        "casamento",
-        "esposa",
+        "filhos",
+        "filhas",
         "marido",
-        "mae",
-        "pai"
+        "esposa",
+        "esposo",
+        "casamento",
+        "casal",
+        "neto",
+        "neta",
+        "netos"
       ],
       "versiculos": [
         {
-          "ref": "Josué 24:15",
-          "texto": "[exemplo] Eu e a minha casa serviremos ao Senhor."
-        },
-        {
           "ref": "Salmos 127:3",
-          "texto": "[exemplo] Os filhos são uma herança que vem do Senhor."
+          "texto": "Eis que os filhos são um presente do SENHOR; o fruto do ventre é uma recompensa."
         },
         {
           "ref": "Provérbios 22:6",
-          "texto": "[exemplo] Eduque a criança no caminho certo, e ela não se desviará dele."
+          "texto": "Instrui ao menino em seu caminho, e até quando envelhecer, não se desviará dele."
+        },
+        {
+          "ref": "Efésios 6:4",
+          "texto": "Pais, não provoqueis à ira os vossos filhos, mas criai-os na disciplina e correção do Senhor."
+        },
+        {
+          "ref": "Colossenses 3:20",
+          "texto": "Filhos, obedecei em tudo aos pais, porque isso é agradável ao Senhor."
+        },
+        {
+          "ref": "Êxodo 20:12",
+          "texto": "Honra a teu pai e a tua mãe, para que teus dias se alarguem na terra que o SENHOR teu Deus te dá."
+        },
+        {
+          "ref": "Salmos 128:3",
+          "texto": "Tua mulher será como a videira frutífera, ao lado de tua casa; e teus filhos como plantas de oliveira ao redor de tua mesa."
+        },
+        {
+          "ref": "Atos 16:31",
+          "texto": "E eles lhe disseram: Crê no Senhor Jesus Cristo, e serás salvo, tu e a tua casa."
+        },
+        {
+          "ref": "Efésios 5:25",
+          "texto": "Maridos, amai as vossas próprias esposas, assim como também Cristo amou a Igreja, e se entregou por ela;"
+        },
+        {
+          "ref": "Provérbios 31:10",
+          "texto": "Mulher virtuosa, quem a encontrará? Pois seu valor é muito maior que o de rubis."
+        },
+        {
+          "ref": "Salmos 103:17",
+          "texto": "Porém a bondade do SENHOR continua de eternidade em eternidade sobre os que o temem; e a justiça dele está sobre os filhos de seus filhos."
+        },
+        {
+          "ref": "Isaías 54:13",
+          "texto": "E todos os teus filhos serão ensinados pelo SENHOR; e a paz de teus filhos será abundante."
+        },
+        {
+          "ref": "Gênesis 2:24",
+          "texto": "Portanto, deixará o homem a seu pai e a sua mãe, e se achegará à sua mulher, e serão uma só carne."
+        },
+        {
+          "ref": "1 Coríntios 13:4",
+          "texto": "O amor é paciente, é bondoso; o amor não é invejoso; o amor não é orgulhoso, não é arrogante."
+        },
+        {
+          "ref": "Provérbios 17:6",
+          "texto": "A coroa dos idosos são os filhos de seus filhos; e a glória dos filhos são seus pais."
+        }
+      ]
+    },
+    {
+      "id": "cura",
+      "palavras": [
+        "cura",
+        "curar",
+        "curado",
+        "curada",
+        "doente",
+        "doenca",
+        "saude",
+        "hospital",
+        "cirurgia",
+        "tumor",
+        "cancer",
+        "enfermo",
+        "enferma",
+        "internado",
+        "internada"
+      ],
+      "versiculos": [
+        {
+          "ref": "Jeremias 17:14",
+          "texto": "Sara-me, ó SENHOR, e serei sarado; salva-me, e serei salvo; pois tu és meu louvor."
+        },
+        {
+          "ref": "Salmos 103:2-3",
+          "texto": "Louva ao SENHOR, ó minha alma; e não te esqueças de nenhum dos benefícios dele; Que perdoa todas as tuas perversidades, e te sara de todas as tuas enfermidades."
+        },
+        {
+          "ref": "Salmos 147:3",
+          "texto": "Ele sara aos de coração partido, e os cura de suas dores."
+        },
+        {
+          "ref": "Isaías 53:5",
+          "texto": "Porém ele foi ferido por nossas transgressões, e esmagado por nossas perversidades; o castigo que nos traz a paz estava sobre ele, e por suas feridas fomos curados."
+        },
+        {
+          "ref": "Tiago 5:15",
+          "texto": "E a oração da fé sarará o doente, e o Senhor o levantará; e se houver cometido pecados, lhe serão perdoados."
+        },
+        {
+          "ref": "Tiago 5:16",
+          "texto": "Confessai as vossas culpas uns aos outros, e orai uns pelos outros, para que sejais curados. A oração de um justo muito pode efetuar."
+        },
+        {
+          "ref": "3 João 1:2",
+          "texto": "Amado, eu desejo que estejas bem em todas as coisas, e que tenhas saúde, assim como bem está a tua alma."
+        },
+        {
+          "ref": "Jeremias 33:6",
+          "texto": "Eis que eu lhes trarei saúde e cura, e os sararei; e lhes manifestarei abundância de paz e de verdade."
+        },
+        {
+          "ref": "Mateus 9:35",
+          "texto": "Jesus percorria todas as cidades e aldeias, ensinando em suas sinagogas, pregando o Evangelho do Reino, e curando toda enfermidade e toda doença entre o povo."
+        },
+        {
+          "ref": "Marcos 5:34",
+          "texto": "E ele lhe disse: Filha, a tua fé te salvou. Vai em paz, e estejas curada deste teu flagelo."
+        },
+        {
+          "ref": "Salmos 41:3",
+          "texto": "O SENHOR o sustentará no leito de enfermidade; na doença dele tu mudas toda a sua cama."
+        },
+        {
+          "ref": "Salmos 30:2",
+          "texto": "SENHOR, meu Deus; eu clamei a ti, e tu me curaste."
+        },
+        {
+          "ref": "Malaquias 4:2",
+          "texto": "Mas para vós, que temeis o meu nome, o Sol da justiça nascerá, trazendo cura em suas asas; e saireis, e saltareis de alegria como bezerros do curral."
+        },
+        {
+          "ref": "Mateus 8:17",
+          "texto": "Para que se cumprisse o que havia sido dito pelo profeta Isaías, que disse: Ele tomou sobre si as nossas enfermidades, e levou as nossas doenças."
+        },
+        {
+          "ref": "Salmos 6:2",
+          "texto": "Tem misericórdia de mim, SENHOR; porque eu estou enfraquecido; cura-me, SENHOR, porque meus ossos estão afligidos."
+        }
+      ]
+    },
+    {
+      "id": "tristeza",
+      "palavras": [
+        "tristeza",
+        "triste",
+        "tristes",
+        "chorando",
+        "choro",
+        "chorar",
+        "deprimido",
+        "deprimida",
+        "depressao",
+        "luto",
+        "falecimento",
+        "faleceu",
+        "saudade",
+        "sozinho",
+        "sozinha"
+      ],
+      "versiculos": [
+        {
+          "ref": "Salmos 30:5",
+          "texto": "Porque sua ira dura por um momento; mas seu favor dura por toda a vida; o choro fica pela noite, mas a alegria vem pela manhã."
+        },
+        {
+          "ref": "Mateus 5:4",
+          "texto": "Benditos são os que choram, porque eles serão consolados."
+        },
+        {
+          "ref": "João 16:33",
+          "texto": "Estas coisas tenho vos dito para que tenhais paz em mim; no mundo tereis aflição; mas tende bom ânimo; eu venci o mundo."
+        },
+        {
+          "ref": "Salmos 42:11",
+          "texto": "Por que estás abatida, minha alma? E por que te inquietas em mim? Espera em Deus; porque eu ainda o louvarei; ele é a minha salvação e o meu Deus."
+        },
+        {
+          "ref": "Lamentações 3:22-23",
+          "texto": "É pelas bondades do SENHOR que não somos consumidos, porque suas misericórdias não têm fim. Elas são novas a cada manhã; grande é a tua fidelidade."
+        },
+        {
+          "ref": "Romanos 8:28",
+          "texto": "E sabemos que todas as coisas juntamente contribuem para o bem daqueles que amam a Deus, dos que são chamados segundo o seu propósito."
+        },
+        {
+          "ref": "Salmos 126:5",
+          "texto": "Os que semeiam em lágrimas colherão com alegria."
+        },
+        {
+          "ref": "Salmos 73:26",
+          "texto": "Minha carne e meu coração desfalecem; porém Deus será a rocha do meu coração e minha porção para sempre."
+        },
+        {
+          "ref": "João 14:18",
+          "texto": "Não vos deixarei órfãos; eu virei a vós."
+        },
+        {
+          "ref": "Salmos 9:9",
+          "texto": "O SENHOR será um refúgio para o aflito; um refúgio em tempos de angústia."
+        },
+        {
+          "ref": "Romanos 15:13",
+          "texto": "O Deus da esperança vos encha de toda alegria e paz na fé, para que abundeis em esperança no poder do Espírito Santo."
+        },
+        {
+          "ref": "Salmos 30:11",
+          "texto": "Tu tornaste meu pranto em dança; tu desamarraste o meu saco de lamentação, e me envolveste de alegria."
+        },
+        {
+          "ref": "João 16:22",
+          "texto": "Assim também vós agora na verdade tendes tristeza; mas novamente vos verei, e vosso coração se alegrará, e ninguém tirará vossa alegria de vós."
+        },
+        {
+          "ref": "Salmos 119:50",
+          "texto": "Isto é meu consolo na minha aflição, porque tua promessa me vivifica."
+        },
+        {
+          "ref": "2 Coríntios 4:16",
+          "texto": "Por isso não desfalecemos; mas ainda que nosso ser exterior se destrua, todavia o interior se renova a cada dia."
         }
       ]
     },
@@ -58,24 +408,562 @@
       "id": "gratidao",
       "palavras": [
         "gratidao",
+        "grato",
+        "grata",
+        "gratos",
+        "agradecer",
+        "agradeco",
+        "agradecido",
+        "agradecida",
         "obrigado",
         "obrigada",
-        "gracas",
-        "agradecer",
-        "agradecido"
+        "gloria",
+        "louvado"
       ],
       "versiculos": [
         {
           "ref": "1 Tessalonicenses 5:18",
-          "texto": "[exemplo] Em tudo dê graças, pois essa é a vontade de Deus para você."
+          "texto": "Agradecei em tudo, pois essa é a vontade de Deus em Cristo Jesus para vós mesmos."
+        },
+        {
+          "ref": "Salmos 100:4",
+          "texto": "Entrai pelas portas dele com agradecimento, por seus pátios com canto de louvor; agradecei a ele, e bendizei o seu nome."
         },
         {
           "ref": "Salmos 107:1",
-          "texto": "[exemplo] Dê graças ao Senhor, porque ele é bom e o seu amor dura para sempre."
+          "texto": "Agradecei ao SENHOR, porque ele é bom; porque sua bondade dura para sempre."
+        },
+        {
+          "ref": "Salmos 118:24",
+          "texto": "Este é o dia em que o SENHOR agiu; alegremos e enchamos de alegria nele."
+        },
+        {
+          "ref": "Salmos 103:1",
+          "texto": "Louva ao SENHOR, ó minha alma; e que todo o meu interior louve ao seu santo nome."
         },
         {
           "ref": "Colossenses 3:15",
-          "texto": "[exemplo] Que a paz de Cristo governe o seu coração, e seja grato."
+          "texto": "E a paz de Deus, para a qual também fostes chamados em um só corpo, governe em vossos corações, e sede gratos."
+        },
+        {
+          "ref": "Colossenses 3:17",
+          "texto": "E tudo quanto fizerdes, por palavras ou por obras, fazei tudo no nome do Senhor Jesus, dando por meio dele graças ao Deus e Pai."
+        },
+        {
+          "ref": "Salmos 136:1",
+          "texto": "Agradecei ao SENHOR, porque ele é bom, porque sua bondade dura para sempre."
+        },
+        {
+          "ref": "Efésios 5:20",
+          "texto": "agradecendo sempre por tudo a Deus, o Pai, no nome do nosso Senhor Jesus Cristo;"
+        },
+        {
+          "ref": "Salmos 9:1",
+          "texto": "Louvarei a ti, SENHOR com todo o meu coração; contarei todas as tuas maravilhas."
+        },
+        {
+          "ref": "Salmos 28:7",
+          "texto": "O SENHOR é a minha força e meu escudo; meu coração confiou nele, e foi socorrido; por isso meu coração salta de alegria; e com meu canto eu o louvarei."
+        },
+        {
+          "ref": "Salmos 92:1",
+          "texto": "Bom é louvar ao SENHOR, e cantar louvores ao teu nome, ó Altíssimo;"
+        },
+        {
+          "ref": "Salmos 107:8",
+          "texto": "Agradeçam ao SENHOR por sua bondade, e suas maravilhas perante os filhos dos homens."
+        },
+        {
+          "ref": "Salmos 95:2",
+          "texto": "Cheguemos adiante de sua presença com agradecimentos; cantemos salmos a ele."
+        },
+        {
+          "ref": "Salmos 34:1",
+          "texto": "Louvarei ao SENHOR em todo tempo; haverá louvor a ele continuamente em minha boca."
+        }
+      ]
+    },
+    {
+      "id": "fe",
+      "palavras": [
+        "fe",
+        "crer",
+        "creio",
+        "acreditar",
+        "acredito",
+        "confiar",
+        "confio",
+        "confianca",
+        "milagre",
+        "milagres",
+        "impossivel"
+      ],
+      "versiculos": [
+        {
+          "ref": "Hebreus 11:1",
+          "texto": "Ora, a fé é a certeza das coisas que se esperam, e a prova das coisas que não se veem."
+        },
+        {
+          "ref": "Hebreus 11:6",
+          "texto": "Ora, sem fé é impossível agradar a Deus. Pois é necessário que aquele que se aproxima de Deus creia que ele existe, e que ele é recompensador dos que o buscam."
+        },
+        {
+          "ref": "Marcos 9:23",
+          "texto": "E Jesus lhe disse: Se podes crer, tudo é possível ao que crê."
+        },
+        {
+          "ref": "Romanos 10:17",
+          "texto": "Portanto, a fé vem pelo ouvir, e o ouvir pela palavra de Deus."
+        },
+        {
+          "ref": "Marcos 11:24",
+          "texto": "Portanto eu vos digo que tudo o que pedirdes orando, crede que recebereis, e vós o tereis."
+        },
+        {
+          "ref": "Mateus 21:22",
+          "texto": "E tudo o que pedirdes em oração, crendo, recebereis."
+        },
+        {
+          "ref": "Lucas 1:37",
+          "texto": "Pois para Deus nada será impossível."
+        },
+        {
+          "ref": "João 11:40",
+          "texto": "Jesus disse-lhe: Não te disse, que se creres, verás a glória de Deus?"
+        },
+        {
+          "ref": "Gálatas 2:20",
+          "texto": "Já estou crucificado com Cristo. Estou vivendo não mais eu, mas Cristo vive em mim; e vivo a minha vida na carne por meio da fé no Filho de Deus, que me amou, e entregou a si mesmo por mim."
+        },
+        {
+          "ref": "Jeremias 32:27",
+          "texto": "Eis que eu sou o SENHOR, Deus de toda carne: Existe, por acaso, algo difícil demais para mim?"
+        },
+        {
+          "ref": "Hebreus 12:2",
+          "texto": "olhando para Jesus, Autor e aperfeiçoador da fé. Ele, pela alegria que lhe estava proposta, suportou a cruz, desprezando a humilhação, e assentou-se à direita do trono de Deus."
+        },
+        {
+          "ref": "Lucas 18:27",
+          "texto": "E ele disse: As coisas que são impossíveis para os seres humanos são possíveis para Deus."
+        },
+        {
+          "ref": "Hebreus 10:23",
+          "texto": "mantenhamos firme a esperança que declararmos ter, sem abalo algum, pois aquele que prometeu é fiel;"
+        },
+        {
+          "ref": "Marcos 11:22-23",
+          "texto": "E respondendo Jesus, disse-lhes: Tende fé em Deus. Porque em verdade vos digo que qualquer um que disser a este monte: Levanta-te, e lança-te no mar; e não duvidar em seu coração, mas crer que se fará o que diz, tudo o que disser lhe será feito."
+        },
+        {
+          "ref": "1 Coríntios 16:13",
+          "texto": "Vigiai, ficai firmes na fé, sede corajosos, e vos esforçai."
+        }
+      ]
+    },
+    {
+      "id": "perdao",
+      "palavras": [
+        "perdao",
+        "perdoar",
+        "perdoa",
+        "perdoe",
+        "perdoou",
+        "perdoado",
+        "perdoada",
+        "pecado",
+        "pecados",
+        "culpa",
+        "culpado",
+        "culpada",
+        "arrependido",
+        "arrependida",
+        "magoa"
+      ],
+      "versiculos": [
+        {
+          "ref": "1 João 1:9",
+          "texto": "Se confessarmos nossos pecados, ele é fiel e justo para nos perdoar os pecados e nos purificar de toda injustiça."
+        },
+        {
+          "ref": "Efésios 4:32",
+          "texto": "Em vez disso, sede benignos uns com os outros, misericordiosos, perdoando-vos uns aos outros, como também Deus vos perdoou em Cristo."
+        },
+        {
+          "ref": "Salmos 103:12",
+          "texto": "Assim como o oriente está longe do ocidente, assim também ele tira para longe de nós nossas transgressões."
+        },
+        {
+          "ref": "Miqueias 7:18",
+          "texto": "Quem é Deus como tu, que perdoa a maldade, e ignora a transgressão do restante de sua herança? Ele não retém para sempre sua ira, porque ele tem prazer na bondade."
+        },
+        {
+          "ref": "Mateus 6:14",
+          "texto": "Porque se perdoardes às pessoas suas ofensas, vosso Pai celestial também vos perdoará;"
+        },
+        {
+          "ref": "Marcos 11:25",
+          "texto": "E quando estiverdes orando, perdoai, se tendes algo contra alguém, para que o vosso Pai, que está nos céus, vos perdoe vossas ofensas."
+        },
+        {
+          "ref": "Lucas 6:37",
+          "texto": "Não julgueis, e não sereis julgados; não condeneis, e não sereis condenados; liberai, e vos liberarão."
+        },
+        {
+          "ref": "Salmos 32:1",
+          "texto": "Bem-aventurado aquele cuja transgressão é perdoada, cujo pecado é encoberto."
+        },
+        {
+          "ref": "Salmos 86:5",
+          "texto": "Pois tu, Senhor, és bom, perdoador, e grande em bondade para todos os que clamam a ti."
+        },
+        {
+          "ref": "Hebreus 8:12",
+          "texto": "Pois serei misericordioso com as suas injustiças, e não mais me lembrarei dos seus pecados e das suas transgressões."
+        },
+        {
+          "ref": "Salmos 51:10",
+          "texto": "Cria em mim um coração puro, ó Deus; e renova um espírito firme em meu interior."
+        },
+        {
+          "ref": "Romanos 8:1",
+          "texto": "Portanto, agora, nenhuma condenação há para os que estão em Cristo Jesus, que não andam segundo a carne, mas sim segundo o Espírito."
+        },
+        {
+          "ref": "Lucas 15:20",
+          "texto": "E levantando-se, foi a seu pai. E quando ainda estava longe, o seu pai o viu, e teve compaixão dele; e correndo, caiu ao seu pescoço, e o beijou."
+        },
+        {
+          "ref": "Colossenses 3:13-14",
+          "texto": "Suportai-vos uns aos outros, e perdoai-vos uns aos outros, se alguém tiver queixa contra outro. Como Cristo vos perdoou, assim também fazei. E acima de tudo isto, revesti-vos do amor, que é o vínculo da perfeição."
+        }
+      ]
+    },
+    {
+      "id": "provisao",
+      "palavras": [
+        "dinheiro",
+        "emprego",
+        "desempregado",
+        "desempregada",
+        "trabalho",
+        "dividas",
+        "boletos",
+        "financeiro",
+        "financeira",
+        "salario",
+        "aluguel",
+        "fome",
+        "comida",
+        "sustento",
+        "provisao"
+      ],
+      "versiculos": [
+        {
+          "ref": "Mateus 6:26",
+          "texto": "Olhai para as aves do céu, que não semeiam, nem ceifam, nem ajuntam em celeiros; e contudo vosso Pai celestial as alimenta. Não sois vós muito mais importantes que elas?"
+        },
+        {
+          "ref": "Mateus 6:33",
+          "texto": "Mas buscai primeiramente o Reino de Deus e a sua justiça, e todas estas coisas vos serão acrescentadas."
+        },
+        {
+          "ref": "Salmos 23:1",
+          "texto": "O SENHOR é meu pastor, nada me faltará."
+        },
+        {
+          "ref": "Salmos 37:25",
+          "texto": "Eu já fui jovem, e já envelheci; mas nunca vi o justo desamparado, nem a sua semente a pedir pão."
+        },
+        {
+          "ref": "Salmos 34:10",
+          "texto": "Os filhos dos leões passam necessidades e têm fome; mas os que buscam ao SENHOR não têm falta de bem algum."
+        },
+        {
+          "ref": "Mateus 7:7",
+          "texto": "Pedi, e vos será dado; buscai, e achareis; batei, e vos será aberto;"
+        },
+        {
+          "ref": "Salmos 145:15-16",
+          "texto": "Os olhos de todos esperam por ti, e tu lhes dás seu alimento ao seu tempo. Tu abres tua mão, e sacias o desejo de todo ser vivo."
+        },
+        {
+          "ref": "Salmos 90:17",
+          "texto": "E que o agrado do SENHOR nosso Deus seja sobre nós; e confirma as obras de nossas mãos sobre nós; sim, a obra de nossas mãos, confirma!"
+        },
+        {
+          "ref": "Provérbios 16:3",
+          "texto": "Confia tuas obras ao SENHOR, e teus pensamentos serão firmados."
+        },
+        {
+          "ref": "Mateus 6:11",
+          "texto": "O pão nosso de cada dia nos dá hoje."
+        },
+        {
+          "ref": "Lucas 12:24",
+          "texto": "Considerai os corvos, que nem semeiam, nem ceifam; nem tem armazém, nem celeiro; e Deus os alimenta."
+        },
+        {
+          "ref": "Hebreus 13:5",
+          "texto": "A vossa maneira de viver seja sem ganância, contentando-vos com as coisas que tendes. Pois ele disse: Não te deixarei, nem te desampararei."
+        },
+        {
+          "ref": "Gênesis 22:14",
+          "texto": "E chamou Abraão o nome daquele lugar, O SENHOR proverá. Portanto se diz hoje: No monte do SENHOR se proverá."
+        },
+        {
+          "ref": "Isaías 58:11",
+          "texto": "E o SENHOR te guiará continuamente, fartará a tua alma mesmo em grandes secas, e fortalecerá teus ossos; e tu serás como um jardim regado, como um manancial de águas, cujas águas nunca faltam."
+        },
+        {
+          "ref": "Salmos 37:3",
+          "texto": "Confia no SENHOR, e faze o bem; habita a terra, e te alimentarás em segurança."
+        }
+      ]
+    },
+    {
+      "id": "forca",
+      "palavras": [
+        "forca",
+        "forcas",
+        "fortalecer",
+        "cansado",
+        "cansada",
+        "cansaco",
+        "fraco",
+        "fraca",
+        "fraqueza",
+        "desanimo",
+        "desanimado",
+        "desanimada",
+        "esgotado",
+        "esgotada",
+        "coragem"
+      ],
+      "versiculos": [
+        {
+          "ref": "Filipenses 4:13",
+          "texto": "Posso todas as coisas em Cristo que me fortalece."
+        },
+        {
+          "ref": "Isaías 40:29",
+          "texto": "Ele dá força ao cansado, e multiplica as forças daquele que não tem vigor."
+        },
+        {
+          "ref": "Isaías 40:31",
+          "texto": "Mas os que confiam no SENHOR renovarão as forças, subirão com asas como águias; correrão, e não se cansarão; caminharão, e não se fatigarão."
+        },
+        {
+          "ref": "2 Coríntios 12:9",
+          "texto": "Mas ele me disse: “Minha graça te basta, porque meu poder se aperfeiçoa na fraqueza”. Por isso, com muito prazer, eu me orgulharei nas minhas fraquezas, para que o poder de Cristo habite em mim."
+        },
+        {
+          "ref": "Efésios 6:10",
+          "texto": "Por fim, meus irmãos, fortalecei-vos no Senhor e na força do seu poder."
+        },
+        {
+          "ref": "Salmos 18:2",
+          "texto": "O SENHOR é minha rocha, e minha fortaleza, e meu libertador, meu Deus, meu rochedo, em quem confio; é meu escudo, e a força da minha salvação, meu alto refúgio."
+        },
+        {
+          "ref": "Salmos 18:32",
+          "texto": "Deus é o que me veste de força; e o que dá perfeição ao meu caminho."
+        },
+        {
+          "ref": "Salmos 29:11",
+          "texto": "O SENHOR dará força a seu povo; o SENHOR abençoará a seu povo com paz."
+        },
+        {
+          "ref": "Isaías 12:2",
+          "texto": "Eis que Deus é minha salvação; nele confiarei, e não terei medo; porque minha força e minha canção é o SENHOR DEUS; e ele tem sido minha salvação."
+        },
+        {
+          "ref": "Êxodo 15:2",
+          "texto": "O SENHOR é minha força, e minha canção, E foi-me por salvação: Este é meu Deus, e a este engrandecerei; Deus de meu pai, e a este exaltarei."
+        },
+        {
+          "ref": "Salmos 138:3",
+          "texto": "No dia em que clamei, tu me respondeste; e me fortaleceste com força em minha alma."
+        },
+        {
+          "ref": "Gálatas 6:9",
+          "texto": "Porém não cansemos de fazer o bem, pois no tempo devido colheremos, se não desistirmos."
+        },
+        {
+          "ref": "Salmos 31:24",
+          "texto": "Sede fortes, e ele fortalecerá vosso coração, todos vós que esperais no SENHOR."
+        },
+        {
+          "ref": "Salmos 27:14",
+          "texto": "Espera no SENHOR, esforça-te, e ele fortalecerá o teu coração; espera pois ao SENHOR."
+        },
+        {
+          "ref": "Salmos 46:1",
+          "texto": "Deus é nosso refúgio e força; socorro oportuno nas angústias."
+        }
+      ]
+    },
+    {
+      "id": "paz",
+      "palavras": [
+        "paz",
+        "calma",
+        "calmo",
+        "tranquilidade",
+        "tranquilo",
+        "tranquila",
+        "sossego",
+        "descanso",
+        "descansar",
+        "dormir",
+        "insonia",
+        "sono",
+        "briga",
+        "brigas",
+        "conflito"
+      ],
+      "versiculos": [
+        {
+          "ref": "Números 6:24-26",
+          "texto": "O SENHOR te abençoe, e te guarde: Faça resplandecer o SENHOR seu rosto sobre ti, e tenha de ti misericórdia: O SENHOR levante a ti seu rosto, e ponha em ti paz."
+        },
+        {
+          "ref": "Salmos 4:8",
+          "texto": "Eu deitarei, e dormirei em paz; porque só tu, SENHOR, me fazes descansar seguro."
+        },
+        {
+          "ref": "2 Tessalonicenses 3:16",
+          "texto": "E o mesmo Senhor da paz vos dê sempre paz em toda maneira. O Senhor seja com todos vós."
+        },
+        {
+          "ref": "Isaías 9:6",
+          "texto": "Porque um menino nos nasceu, um filho nos foi dado; e o governo está sobre seus ombros; e seu nome se chama Maravilhoso, Conselheiro, Deus Forte, Pai da Eternidade, Príncipe da Paz."
+        },
+        {
+          "ref": "Mateus 5:9",
+          "texto": "Benditos são os pacíficos, porque eles serão chamados filhos de Deus."
+        },
+        {
+          "ref": "Romanos 12:18",
+          "texto": "No que for possível de vossa parte, tende paz com todos."
+        },
+        {
+          "ref": "Salmos 119:165",
+          "texto": "Muita paz têm aqueles que amam a tua lei; e para eles não há tropeço."
+        },
+        {
+          "ref": "Isaías 32:17",
+          "texto": "E a consequência da justiça será paz; e o produto da justiça, repouso e segurança para sempre."
+        },
+        {
+          "ref": "Hebreus 12:14",
+          "texto": "Buscai a paz com todos, e a santificação, sem a qual ninguém verá o Senhor."
+        },
+        {
+          "ref": "Isaías 55:12",
+          "texto": "Porque com alegria saireis, e em paz sereis guiados; os montes e os morros cantarão de alegria perante vossa presença, e todas as árvores do campo baterão palmas."
+        },
+        {
+          "ref": "Provérbios 3:24",
+          "texto": "Quando te deitares, não terás medo; tu deitarás, e teu sono será suave."
+        },
+        {
+          "ref": "Romanos 5:1",
+          "texto": "Portanto, agora que somos justificados pela fé, temos paz com Deus por meio do nosso Senhor Jesus Cristo."
+        },
+        {
+          "ref": "Isaías 54:10",
+          "texto": "Porque montes se removerão e morros se retirarão, porém minha bondade não se removerá de ti, nem o pacto de minha paz se retirará, diz o SENHOR, que tem compaixão de ti."
+        },
+        {
+          "ref": "Salmos 3:5",
+          "texto": "Eu me deitei, e dormi; acordei, porque o SENHOR me sustentava."
+        },
+        {
+          "ref": "Jeremias 29:11",
+          "texto": "Porque eu sei os pensamentos que penso quanto a vós, diz o SENHOR, pensamentos de paz, e não de mal, para vos dar um futuro com esperança."
+        }
+      ]
+    },
+    {
+      "id": "salvacao",
+      "palavras": [
+        "salvacao",
+        "salvar",
+        "salvou",
+        "salvos",
+        "converter",
+        "conversao",
+        "convertido",
+        "convertida",
+        "batismo",
+        "batizado",
+        "batizada",
+        "batizar",
+        "eterna",
+        "perdido",
+        "perdida"
+      ],
+      "versiculos": [
+        {
+          "ref": "João 3:16",
+          "texto": "Porque Deus amou ao mundo de tal maneira, que deu o seu Filho unigênito; para que todo aquele que nele crê não pereça, mas tenha a vida eterna."
+        },
+        {
+          "ref": "Romanos 10:9",
+          "texto": "Pois, se com a tua boca declarares que Jesus é Senhor, e em teu coração creres que Deus o ressuscitou dos mortos, serás salvo."
+        },
+        {
+          "ref": "Romanos 6:23",
+          "texto": "porque o salário do pecado é a morte, mas o dom gratuito de Deus é a vida eterna em Cristo Jesus nosso Senhor."
+        },
+        {
+          "ref": "João 14:6",
+          "texto": "Jesus lhe disse: Eu sou o caminho, e a verdade, e a vida. Ninguém vem ao Pai, a não ser por mim."
+        },
+        {
+          "ref": "Atos 4:12",
+          "texto": "E em nenhum outro há salvação; porque nenhum outro nome há abaixo do céu, dado entre os seres humanos, em quem devemos ser salvos."
+        },
+        {
+          "ref": "Efésios 2:8-9",
+          "texto": "Porque pela graça sois salvos, por meio da fé; e isto não vem de vós; é dom de Deus; não por obras, para que ninguém tenha orgulho de si mesmo."
+        },
+        {
+          "ref": "Romanos 5:8",
+          "texto": "Mas Deus prova o seu amor por nós através de Cristo haver morrido por nós, quando ainda éramos pecadores."
+        },
+        {
+          "ref": "2 Coríntios 5:17",
+          "texto": "Portanto, se alguém está em Cristo, uma nova criatura é; as coisas velhas já passaram, eis que tudo se fez novo."
+        },
+        {
+          "ref": "Apocalipse 3:20",
+          "texto": "Eis que eu estou à porta, e bato; se alguém ouvir a minha voz, e abrir a porta, entrarei até ele, e cearei com ele, e ele comigo."
+        },
+        {
+          "ref": "João 1:12",
+          "texto": "Mas a todos quantos o receberam, deu-lhes poder de serem feitos filhos de Deus: aos que creem em seu nome."
+        },
+        {
+          "ref": "João 10:28",
+          "texto": "E eu lhes dou a vida eterna, e para sempre não perecerão, e ninguém as arrancará de minha mão."
+        },
+        {
+          "ref": "1 João 5:11",
+          "texto": "E este é o testemunho: que Deus nos deu a vida eterna; e essa vida está no seu Filho."
+        },
+        {
+          "ref": "Lucas 19:10",
+          "texto": "Porque o Filho do homem veio para buscar, e para salvar o que tinha se perdido."
+        },
+        {
+          "ref": "Romanos 10:13",
+          "texto": "Pois: “Todo aquele que invocar o nome do Senhor será salvo.”"
+        },
+        {
+          "ref": "João 11:25",
+          "texto": "Disse-lhe Jesus: Eu sou a ressurreição, e a vida; quem crê em mim, ainda que esteja morto, viverá."
         }
       ]
     },
@@ -84,16 +972,196 @@
       "palavras": [],
       "versiculos": [
         {
-          "ref": "Salmos 23:1",
-          "texto": "[exemplo] O Senhor é o meu pastor; nada me faltará."
+          "ref": "João 8:12",
+          "texto": "Falou-lhes pois Jesus outra vez, dizendo: Eu sou a luz do mundo; quem me seguir não andará em trevas, mas terá luz de vida."
         },
         {
-          "ref": "Jeremias 29:11",
-          "texto": "[exemplo] Deus tem planos de paz e de esperança para a sua vida."
+          "ref": "Lamentações 3:25",
+          "texto": "Bom é o SENHOR para os que nele esperam, para a alma que o busca."
         },
         {
-          "ref": "Isaías 41:10",
-          "texto": "[exemplo] Não tenha medo, pois estou com você, diz o Senhor."
+          "ref": "Salmos 145:18",
+          "texto": "O SENHOR está perto de todos os que o chamam; de todos os que clamam a ele sinceramente."
+        },
+        {
+          "ref": "Salmos 136:26",
+          "texto": "Agradecei ao Deus dos céus; porque sua bondade dura para sempre."
+        },
+        {
+          "ref": "Salmos 150:6",
+          "texto": "Tudo quanto tem fôlego, louve ao SENHOR! Aleluia!"
+        },
+        {
+          "ref": "Salmos 19:1",
+          "texto": "Os céus declaram a glória de Deus; e o firmamento anuncia a obra de suas mãos."
+        },
+        {
+          "ref": "Isaías 40:8",
+          "texto": "A erva se seca, as flores caem; porém a palavra do nosso Deus continua firme para sempre."
+        },
+        {
+          "ref": "Mateus 5:14",
+          "texto": "Vós sois a luz do mundo; não se pode esconder uma cidade fundada sobre o monte;"
+        },
+        {
+          "ref": "Mateus 5:16",
+          "texto": "Assim brilhe vossa luz diante das pessoas, para que vejam vossas boas obras, e glorifiquem ao vosso Pai, que está nos céus."
+        },
+        {
+          "ref": "Mateus 28:20",
+          "texto": "ensinando-lhes a guardar todas as coisas que eu vos tenho mandado. E eis que eu estou convosco todos os dias, até o fim dos tempos. Amém."
+        },
+        {
+          "ref": "João 15:5",
+          "texto": "Eu sou a videira, vós sois os ramos; quem está em mim, e eu nele, esse dá muito fruto; porque sem mim nada podeis fazer."
+        },
+        {
+          "ref": "1 João 4:8",
+          "texto": "Aquele que não ama não conhece a Deus, porque Deus é amor."
+        },
+        {
+          "ref": "1 João 4:19",
+          "texto": "Nós o amamos, porque ele nos amou primeiro."
+        },
+        {
+          "ref": "Romanos 8:31",
+          "texto": "Então, que diremos acerca dessas coisas? Se Deus é por nós, quem será contra nós?"
+        },
+        {
+          "ref": "Romanos 8:37",
+          "texto": "Mas em todas estas coisas somos mais que vencedores, por meio daquele que nos amou."
+        },
+        {
+          "ref": "Romanos 8:38-39",
+          "texto": "Pois tenho certeza que nem a morte, nem a vida, nem anjos, nem principados, nem poderes, nem o presente, nem o futuro, nem altura, nem profundeza, nem qualquer outra criatura poderá nos separar do amor de Deus, que está em Cristo Jesus, nosso Senhor."
+        },
+        {
+          "ref": "Salmos 16:11",
+          "texto": "Tu me farás conhecer o caminho da vida; fartura de alegrias há em tua presença; agrados estão em tua mão direita para sempre."
+        },
+        {
+          "ref": "Salmos 113:3",
+          "texto": "Desde o nascer do sol até o poente, seja louvado o nome do SENHOR."
+        },
+        {
+          "ref": "Salmos 117:1-2",
+          "texto": "Louvai ao SENHOR, todas as nações; celebrai a ele, todos os povos. Porque sua bondade prevaleceu sobre nós, e a fidelidade do SENHOR dura para sempre. Aleluia!"
+        },
+        {
+          "ref": "Salmos 145:9",
+          "texto": "O SENHOR é bom para com todos; e suas misericórdias estão sobre todas as obras que ele fez."
+        },
+        {
+          "ref": "Salmos 100:5",
+          "texto": "Porque o SENHOR é bom, sua bondade dura para sempre; e a fidelidade dele continua de geração após geração."
+        },
+        {
+          "ref": "Sofonias 3:17",
+          "texto": "O SENHOR está no meio de ti, guerreiro que salva; ele terá prazer em ti com alegria; ele te aquietará em seu amor, se encherá de alegria por causa de ti com júbilo."
+        },
+        {
+          "ref": "Isaías 60:1",
+          "texto": "Levanta-te! Brilha! Porque já chegou a tua luz; e a glória do SENHOR já está raiando sobre ti."
+        },
+        {
+          "ref": "Salmos 5:3",
+          "texto": "SENHOR, pela manhã ouvirás minha voz; pela manhã apresentarei meu clamor a ti, e ficarei esperando."
+        },
+        {
+          "ref": "Salmos 103:8",
+          "texto": "Misericordioso e piedoso é o SENHOR, que demora para se irar, e é grande em bondade."
+        },
+        {
+          "ref": "Salmos 119:114",
+          "texto": "Tu és meu refúgio e meu escudo; eu espero em tua palavra."
+        },
+        {
+          "ref": "Provérbios 18:10",
+          "texto": "O nome do SENHOR é uma torre forte; o justo correrá até ele, e ficará seguro."
+        },
+        {
+          "ref": "Isaías 30:21",
+          "texto": "E quando virardes para a direita ou para a esquerda, teus ouvidos ouvirão a palavra do que está atrás de ti, dizendo: Este é o caminho; andai por ele."
+        },
+        {
+          "ref": "Isaías 46:4",
+          "texto": "E até vossa velhice eu serei o mesmo, e ainda até à idade dos cabelos grisalhos eu vos carregarei; eu vos fiz, e eu vos levarei; eu vos carregarei e vos livrarei."
+        },
+        {
+          "ref": "Miqueias 6:8",
+          "texto": "Ele já declarou a ti, ó ser humano, o que é bom; e que mais o SENHOR pede de ti, a não ser fazer o que é justo, amar a bondade, e andar humildemente com teu Deus?"
+        },
+        {
+          "ref": "Gálatas 5:22-23",
+          "texto": "Mas o fruto do Espírito é: amor, alegria, paz, paciência, benignidade, bondade, fidelidade, mansidão, domínio próprio. Contra essas coisas não há lei."
+        },
+        {
+          "ref": "1 Coríntios 13:13",
+          "texto": "E agora continuam a fé, a esperança, e o amor, estes três; porém o maior destes é o amor."
+        },
+        {
+          "ref": "Salmos 34:8",
+          "texto": "Experimentai, e vede que o SENHOR é bom; bem-aventurado é o homem que confia nele."
+        },
+        {
+          "ref": "Salmos 86:15",
+          "texto": "Porém tu, Senhor, és Deus misericordioso e piedoso; tardio para se irar, e abundante em bondade e verdade."
+        },
+        {
+          "ref": "Romanos 12:12",
+          "texto": "Alegrai-vos na esperança. Sede pacientes na aflição. Perseverai na oração."
+        },
+        {
+          "ref": "Salmos 37:4",
+          "texto": "E agrada-te no SENHOR; e ele te dará os pedidos de teu coração."
+        },
+        {
+          "ref": "Salmos 84:11",
+          "texto": "Porque o SENHOR Deus é sol e escudo; o SENHOR concederá graça e honra; ele não negará o bem aos que andam em integridade."
+        },
+        {
+          "ref": "Salmos 139:14",
+          "texto": "Eu te louvarei porque de um jeito assombroso e maravilhoso eu fui feito; maravilhosas são tuas obras; e minha alma sabe muito bem."
+        },
+        {
+          "ref": "Jeremias 31:3",
+          "texto": "O SENHOR apareceu a mim já há muito tempo, dizendo: Com amor eterno eu tenho te amado; por isso com bondade te sustento."
+        },
+        {
+          "ref": "Salmos 121:1-2",
+          "texto": "Levanto meus olhos aos montes. De onde virá meu socorro? Meu socorro vem do SENHOR, que fez os céus e a terra."
+        },
+        {
+          "ref": "Salmos 125:1",
+          "texto": "Os que confiam no SENHOR são como o monte de Sião, que não se abala, e permanece para sempre."
+        },
+        {
+          "ref": "Salmos 121:7",
+          "texto": "O SENHOR te guardará de todo mal; ele guardará a tua alma."
+        },
+        {
+          "ref": "Salmos 36:7",
+          "texto": "Como é preciosa, SENHOR, a tua bondade! Porque os filhos dos homens se abrigam à sombra de tuas asas."
+        },
+        {
+          "ref": "Salmos 63:3",
+          "texto": "Porque tua bondade é melhor que a vida; meus lábios te louvarão."
+        },
+        {
+          "ref": "Naum 1:7",
+          "texto": "O SENHOR é bom, é fortaleza no dia da angústia; ele conhece os que nele confiam."
+        },
+        {
+          "ref": "Jeremias 33:3",
+          "texto": "Clama a mim, e eu te responderei; e te direi coisas grandes e difíceis que tu não conheces."
+        },
+        {
+          "ref": "João 10:10",
+          "texto": "O ladrão não vem, senão para roubar, matar, e destruir; eu vim para que tenham vida, e a tenham em abundância."
+        },
+        {
+          "ref": "Filipenses 1:6",
+          "texto": "E disto tenho certeza: aquele que começou a boa obra em vós irá completá-la até o dia de Jesus Cristo."
         }
       ]
     },
@@ -102,16 +1170,60 @@
       "palavras": [],
       "versiculos": [
         {
-          "ref": "Salmos 122:1",
-          "texto": "[exemplo] Fiquei alegre quando me disseram: vamos à casa do Senhor."
+          "ref": "Salmos 118:26",
+          "texto": "Bendito aquele que vem no nome do SENHOR; nós vos bendizemos desde a casa do SENHOR."
         },
         {
           "ref": "Romanos 15:7",
-          "texto": "[exemplo] Acolham uns aos outros, como Cristo os acolheu."
+          "texto": "Portanto, recebei uns aos outros, assim como também Cristo nos recebeu para a glória de Deus."
         },
         {
-          "ref": "Hebreus 13:2",
-          "texto": "[exemplo] Não deixem de receber bem as visitas; é uma honra recebê-las."
+          "ref": "Salmos 122:1",
+          "texto": "Alegro-me com os que me dizem: Vamos à casa do SENHOR."
+        },
+        {
+          "ref": "Salmos 100:2",
+          "texto": "Servi ao SENHOR com alegria; vinde com alegre canto perante sua presença."
+        },
+        {
+          "ref": "Salmos 95:1",
+          "texto": "Vinde, cantemos alegres ao SENHOR; gritemos de alegria à rocha de nossa salvação."
+        },
+        {
+          "ref": "Salmos 34:3",
+          "texto": "Engrandecei ao SENHOR comigo, e juntos exaltemos o seu nome."
+        },
+        {
+          "ref": "Salmos 95:6",
+          "texto": "Vinde, adoremos, e prostremo-nos; ajoelhemo-nos perante o SENHOR, que nos fez."
+        },
+        {
+          "ref": "Salmos 121:8",
+          "texto": "O SENHOR guardará tua saída e tua entrada, desde agora e para sempre."
+        },
+        {
+          "ref": "2 João 1:3",
+          "texto": "Graça, misericórdia, e paz de Deus Pai, e do Senhor Jesus Cristo, o Filho do Pai, seja convosco em verdade e amor."
+        },
+        {
+          "ref": "Salmos 96:1",
+          "texto": "Cantai ao SENHOR uma nova canção; cantai ao SENHOR toda a terra."
+        },
+        {
+          "ref": "Filipenses 4:4",
+          "texto": "Alegrai-vos sempre no Senhor. Volto a dizer: alegrai-vos."
+        },
+        {
+          "ref": "Judas 1:2",
+          "texto": "Misericórdia a vós, e a paz e o amor vos sejam multiplicados."
+        },
+        {
+          "ref": "Apocalipse 22:21",
+          "texto": "A graça do nosso Senhor Jesus Cristo seja com todos vós. Amém!"
+        },
+        {
+          "ref": "Salmos 47:1",
+          "texto": "Vós todos os povos, batei palmas; clamai a Deus com voz de alegria."
         }
       ]
     },
@@ -120,16 +1232,64 @@
       "palavras": [],
       "versiculos": [
         {
-          "ref": "Hebreus 10:24",
-          "texto": "[exemplo] Vamos nos incentivar uns aos outros ao amor e às boas ações."
+          "ref": "Salmos 133:1",
+          "texto": "Vede como é bom e agradável que irmãos convivam em união!"
         },
         {
-          "ref": "Eclesiastes 4:9",
-          "texto": "[exemplo] Melhor ser dois do que um, pois juntos têm melhor recompensa."
+          "ref": "Mateus 18:20",
+          "texto": "Pois onde dois ou três estiverem reunidos em meu nome, ali eu estou no meio deles."
         },
         {
-          "ref": "Atos 2:42",
-          "texto": "[exemplo] Eles permaneciam unidos no ensino, na comunhão e nas orações."
+          "ref": "Romanos 12:10",
+          "texto": "Amai-vos cordialmente uns aos outros com amor de irmãos, preferindo honrar uns aos outros."
+        },
+        {
+          "ref": "1 Tessalonicenses 5:11",
+          "texto": "Portanto exortai-vos uns aos outros, e edificai-vos uns aos outros, como já fazeis."
+        },
+        {
+          "ref": "Gálatas 6:2",
+          "texto": "Levai as cargas uns dos outros, e assim cumprireis a lei de Cristo."
+        },
+        {
+          "ref": "Eclesiastes 4:12",
+          "texto": "E se alguém prevalecer contra um, dois podem resistir contra ele; porque o cordão de três dobras não se rompe tão depressa."
+        },
+        {
+          "ref": "João 13:34",
+          "texto": "Um novo mandamento vos dou: que vos ameis uns aos outros; tal como eu vos amei, também ameis vós uns aos outros."
+        },
+        {
+          "ref": "Filipenses 1:3",
+          "texto": "Agradeço ao meu Deus todas as vezes que me lembro de vós,"
+        },
+        {
+          "ref": "Filipenses 2:2",
+          "texto": "completai a minha alegria: que penseis da mesma maneira, tenhais o mesmo amor, sejais unidos de ânimo, tendo um mesmo modo de pensar."
+        },
+        {
+          "ref": "1 Pedro 4:8",
+          "texto": "Mas, acima de tudo, tende fervoroso amor uns para com os outros; porque o amor cobrirá uma multidão de pecados."
+        },
+        {
+          "ref": "Efésios 4:2-3",
+          "texto": "com toda humildade e mansidão; com paciência, tolerando uns aos outros em amor. Procurai guardar a unidade do Espírito pelo vínculo da paz."
+        },
+        {
+          "ref": "1 Coríntios 12:27",
+          "texto": "E vós sois o corpo de Cristo, e membros em particular."
+        },
+        {
+          "ref": "Romanos 12:5",
+          "texto": "assim também nós, ainda que muitos, somos um único corpo em Cristo; porém, individualmente, membros uns dos outros."
+        },
+        {
+          "ref": "1 João 4:7",
+          "texto": "Amados, nos amemos uns aos outros; porque o amor é de Deus, e todo aquele que ama é nascido de Deus e conhece a Deus."
+        },
+        {
+          "ref": "Romanos 12:15",
+          "texto": "Alegrai-vos com os que se alegram, e chorai com os que choram."
         }
       ]
     }

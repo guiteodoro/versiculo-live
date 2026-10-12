@@ -26,6 +26,14 @@ Clique em **Abrir pasta de dados**. Os arquivos ficam em `%APPDATA%\versiculo-li
 
 Depois de editar, clique em **Conectar** de novo para recarregar.
 
+O app só copia o `versiculos.json` do projeto para essa pasta quando ele ainda não existe lá. Para receber uma versão nova dos versículos (por exemplo, depois de atualizar o projeto), apague `%APPDATA%\versiculo-live\dados\versiculos.json` e abra o app de novo (as suas edições nesse arquivo serão perdidas).
+
+## Tradução bíblica
+
+Todas as Escrituras em português citadas são da Bíblia Livre (BLIVRE), Copyright © Diego Santos, Mario Sérgio e Marco Teles, fevereiro de 2018. Licença Creative Commons Atribuição 4.0 Brasil: <https://ebible.org/porbr2018/copyright.htm>.
+
+A tela mostra o crédito "BLIVRE" no canto inferior direito. Os textos foram copiados sem alteração do arquivo USFM do eBible.org (`porbr2018`), só sem as notas de rodapé, pela ferramenta `ferramentas/extrair-versiculos.mjs` (a lista de referências e palavras-chave fica em `ferramentas/selecao-versiculos.json`).
+
 ## Logs
 
 Ficam em `%APPDATA%\versiculo-live\logs`. Se algo der errado, olhe o arquivo mais recente.
