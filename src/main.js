@@ -47,6 +47,7 @@ let ativo = false; // o usuário pediu para conectar e ainda não desconectou
 let estadoAtual = { estado: 'desligado', arroba: '', ativo: false };
 let tamanhoFila = 0;
 let avisoAtual = '';
+let ultimasCurtidas = null; // última barra de curtidas enviada à tela
 const registros = [];
 
 const p2 = (n) => String(n).padStart(2, '0');
@@ -97,6 +98,7 @@ function mostrar(msg) {
     case 'cartao':
     case 'faixa':
     case 'curtidas':
+      if (msg.canal === 'curtidas') ultimasCurtidas = msg;
       enviar(tela, 'vl:aoMostrar', msg);
       break;
     case 'registro': {
@@ -234,6 +236,10 @@ function abrirTela() {
   tela.setAspectRatio(9 / 16);
   travarNavegacao(tela);
   tela.on('page-title-updated', (e) => e.preventDefault());
+  tela.webContents.on('did-finish-load', () => {
+    // barra de curtidas sempre visível, mesmo antes da primeira curtida
+    enviar(tela, 'vl:aoMostrar', ultimasCurtidas ?? { canal: 'curtidas', total: 0, meta: config.metaCurtidas });
+  });
   tela.on('closed', () => {
     tela = null;
   });
@@ -331,15 +337,34 @@ function autoteste() {
       usuario: { id: 'autoteste-longo', arroba: 'abcdefghij'.repeat(3), nome: 'Teste Longo', foto: 'https://127.0.0.1:1/foto.jpg' },
       texto: 'paz',
     })],
-    [27000, () => enviar(tela, 'vl:aoMostrar', {
-      canal: 'cartao',
-      tipo: 'comentario',
-      usuario: { id: 'autoteste-verso', arroba: 'verso.longo', nome: 'Verso Longo', foto: 'https://127.0.0.1:1/foto.jpg' },
-      versiculo: { ref: 'Teste 1:1', texto: 'Versículo longo de teste. '.repeat(16), tema: 'geral' },
-      duracaoMs: 3000,
-      aSeguir: { arrobas: ['a', 'b'], resto: 0 },
-    })],
   );
+  // quando cada cartão do diretor entra, pelos tempos da config
+  const inicioMeta = 1500 + config.tempoPresenteS * 1000; // presente das 1,5 s termina → meta
+  const voltaComentario = inicioMeta + config.tempoMetaS * 1000; // comentário interrompido volta
+  const arrobaLongo = voltaComentario + config.tempoComentarioS * 1000; // comentário do @ de 30 caracteres
+  const cartaoTeste = (arroba, texto, foto) => () => enviar(tela, 'vl:aoMostrar', {
+    canal: 'cartao',
+    tipo: 'comentario',
+    usuario: { id: `autoteste-${arroba}`, arroba, nome: arroba, foto },
+    versiculo: { ref: 'Teste 1:1', texto, tema: 'geral' },
+    duracaoMs: 3000,
+    aSeguir: { arrobas: ['a', 'b'], resto: 0 },
+  });
+  passos.push(
+    [arrobaLongo + 1500, cartaoTeste('verso.longo', 'Versículo longo de teste. '.repeat(16), null)],
+    [arrobaLongo + 3300, cartaoTeste('foto.falhou', 'Versículo curto de teste.', 'https://127.0.0.1:1/foto.jpg')],
+  );
+  const capturas = [
+    [1450, '01-comentario'],
+    [1900, '02-presente-interrompe'],
+    [2700, '03-faixa-seguidor'],
+    [inicioMeta + 1200, '04-meta'],
+    [voltaComentario + 800, '05-comentario-volta'],
+    [arrobaLongo + 800, '06-arroba-longo'],
+    [arrobaLongo + 2300, '07-versiculo-longo'],
+    [arrobaLongo + 4300, '08-foto-falhou'],
+  ];
+  const fim = arrobaLongo + 5000;
   // fim de live simulado (a conexão real emite isto e para de tentar): o botão deve voltar a Conectar
   passos.push([9000, async () => {
     await desconectar();
@@ -381,15 +406,26 @@ function autoteste() {
     })()`);
     log.info(`autoteste: tela ${JSON.stringify(visto)}`);
   };
-  for (const ms of [1300, 2500, 5000, 7000, 14500, 25000, 27500]) {
-    setTimeout(() => conferirTela().catch((e) => log.erro('autoteste', e)), ms);
+  // screenshots da tela para conferir o visual (pasta fora do git)
+  const pastaCapturas = path.join(PASTA_SRC, '..', '.superpowers', 'capturas');
+  const capturar = async (nome) => {
+    await conferirTela();
+    if (!tela || tela.isDestroyed()) return;
+    const imagem = await tela.webContents.capturePage();
+    await fs.mkdir(pastaCapturas, { recursive: true });
+    const arquivo = path.join(pastaCapturas, `${nome}.png`);
+    await fs.writeFile(arquivo, imagem.toPNG());
+    log.info(`autoteste: captura ${arquivo}`);
+  };
+  for (const [ms, nome] of capturas) {
+    setTimeout(() => capturar(nome).catch((e) => log.erro('autoteste: captura', e)), ms);
   }
   tela?.webContents.on('console-message', (e) => log.info(`autoteste: tela console ${e.level}: ${e.message}`));
   for (const [ms, passo] of passos) setTimeout(() => seguro('autoteste', passo), ms);
   setTimeout(() => {
     log.info('autoteste: fim');
     app.quit();
-  }, 31_000);
+  }, fim);
 }
 
 // ---- início ----
