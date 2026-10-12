@@ -37,11 +37,6 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     return filtro.bloqueia(usuario.arroba ?? '') || filtro.bloqueia(usuario.nome ?? '');
   }
 
-  function ehDono(usuario) {
-    const dono = (cfg.arroba ?? '').trim().replace(/^@/, '').toLowerCase();
-    return dono !== '' && (usuario.arroba ?? '').toLowerCase() === dono;
-  }
-
   function registro(texto) {
     mostrar({ canal: 'registro', texto });
   }
@@ -72,10 +67,11 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     mostrar({ canal: 'cartao', tipo, ...mensagem, duracaoMs });
   }
 
-  function mostrarProximo() {
+  // `pularMeta`: presente que interrompe comentário entra já; a meta vem logo depois dele.
+  function mostrarProximo({ pularMeta = false } = {}) {
     if (parado || atual) return;
 
-    if (metaPendente !== null) {
+    if (metaPendente !== null && !pularMeta) {
       const meta = metaPendente;
       metaPendente = null;
       const versiculo = versiculos.doTema('comunidade');
@@ -133,7 +129,7 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
 
   function receberComentario(evento) {
     const texto = typeof evento.texto === 'string' ? evento.texto.trim() : '';
-    if (texto === '' || ehDono(evento.usuario)) return;
+    if (texto === '') return;
     const usuario = copiaUsuario(evento.usuario);
     if (bloqueado(evento.usuario) || filtro.bloqueia(texto)) {
       registro(`🚫 comentário bloqueado de @${usuario.arroba}`);
@@ -149,12 +145,13 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
       ? { ...evento.usuario, ...ANONIMO }
       : copiaUsuario(evento.usuario);
     fila.adicionarPresente({ tipo: 'presente', usuario, presente: { ...evento.presente } });
-    if (atual?.tipo === 'comentario') {
+    const interrompeu = atual?.tipo === 'comentario';
+    if (interrompeu) {
       clearTimeout(atual.timer);
       fila.devolverComentario(atual.item);
       atual = null;
     }
-    mostrarProximo();
+    mostrarProximo({ pularMeta: interrompeu });
     avisarFila();
   }
 

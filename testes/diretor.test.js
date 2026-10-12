@@ -181,10 +181,23 @@ test('@ bloqueado: comentário ignorado, presente como anônimo', (t) => {
   assert.equal(evento.usuario.arroba, 'idiota 123', 'não altera o evento recebido');
 });
 
-test('comentário do dono da live é ignorado', (t) => {
-  const { diretor, msgs } = novo(t, { arroba: 'Pastor' });
-  diretor.receber(c('pastor', 'bem-vindos'));
-  assert.equal(msgs.length, 0);
+test('presente que interrompe comentário entra antes da meta pendente', (t) => {
+  const { diretor, cartoes } = novo(t);
+  diretor.receber(c('ana', 'minha familia'));
+  t.mock.timers.tick(1000);
+  diretor.receber(k(1000));
+  assert.equal(cartoes().length, 1, 'meta não interrompe o comentário');
+  diretor.receber(p('bia'));
+  assert.equal(cartoes().length, 2);
+  assert.equal(cartoes()[1].tipo, 'presente');
+  assert.equal(cartoes()[1].usuario.arroba, 'bia');
+  t.mock.timers.tick(12000);
+  assert.equal(cartoes()[2].tipo, 'meta');
+  assert.equal(cartoes()[2].meta, 1000);
+  t.mock.timers.tick(10000);
+  assert.equal(cartoes()[3].tipo, 'comentario');
+  assert.equal(cartoes()[3].usuario.arroba, 'ana');
+  assert.equal(cartoes()[3].duracaoMs, 8000);
 });
 
 test('@ longo é cortado em 22 caracteres', (t) => {

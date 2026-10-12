@@ -6,7 +6,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "test": "node --test testes/"
+    "test": "node --test --disable-warning=ExperimentalWarning testes/"
   },
   "dependencies": {
     "tiktok-live-connector": "2.5.0"
