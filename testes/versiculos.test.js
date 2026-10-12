@@ -16,6 +16,17 @@ test('empate fica com o primeiro tema do arquivo', () => {
   const v = criarVersiculos(EXEMPLO);
   assert.equal(v.temaDe('ansiedade na familia'), 'ansiedade'); // ansiedade vem antes em EXEMPLO
 });
+test('plural não é erro de digitação: só conta se estiver na lista', () => {
+  const v = criarVersiculos({ temas: [
+    { id: 'familia', palavras: ['irmao'], versiculos: [{ ref: 'A 1:1', texto: 'a' }] },
+    { id: 'geral', palavras: [], versiculos: [{ ref: 'B 1:1', texto: 'b' }] },
+    { id: 'boas-vindas', palavras: [], versiculos: [{ ref: 'C 1:1', texto: 'c' }] },
+    { id: 'comunidade', palavras: [], versiculos: [{ ref: 'D 1:1', texto: 'd' }] },
+  ] });
+  assert.equal(v.temaDe('meu irmão'), 'familia');
+  assert.equal(v.temaDe('meu irnao'), 'familia');
+  assert.equal(v.temaDe('boa noite irmãos'), 'geral');
+});
 test('não repete enquanto houver opção', () => {
   const v = criarVersiculos(EXEMPLO, { aleatorio: () => 0 });
   const refs = [1, 2, 3].map(() => v.doTema('geral').ref);
@@ -46,7 +57,7 @@ test('escolher devolve versículo do tema do comentário; doTema desconhecido ca
 // ---- dados/versiculos.json (Bíblia Livre) ----
 import { readFileSync } from 'node:fs';
 const DADOS = JSON.parse(readFileSync(new URL('../dados/versiculos.json', import.meta.url), 'utf8'));
-const BUSCAVEIS = ['ansiedade', 'medo', 'familia', 'cura', 'tristeza', 'gratidao', 'fe', 'perdao', 'provisao', 'forca', 'paz', 'salvacao'];
+const BUSCAVEIS = ['ansiedade', 'medo', 'cura', 'familia', 'tristeza', 'gratidao', 'fe', 'perdao', 'provisao', 'forca', 'paz', 'salvacao'];
 
 test('dados/versiculos.json: válido, com os 15 temas na ordem e a tradução BLIVRE', () => {
   assert.deepEqual(validarDados(DADOS), { ok: true });
@@ -59,7 +70,7 @@ test('dados/versiculos.json: quantidades por tema', () => {
   for (const id of BUSCAVEIS) {
     const t = porId[id];
     assert.ok(t.versiculos.length >= 10 && t.versiculos.length <= 15, `${id}: ${t.versiculos.length} versículos`);
-    assert.ok(t.palavras.length >= 8 && t.palavras.length <= 15, `${id}: ${t.palavras.length} palavras`);
+    assert.ok(t.palavras.length >= 8 && t.palavras.length <= 25, `${id}: ${t.palavras.length} palavras`);
   }
   assert.ok(porId.geral.versiculos.length >= 30);
   assert.ok(porId['boas-vindas'].versiculos.length >= 10);
@@ -98,6 +109,13 @@ test('dados/versiculos.json: comentários vão para o tema certo', () => {
     'curta e compartilhe': 'geral',
     'lutou muito': 'geral',
     'preciso de cura': 'cura',
+    'que deus cure minha avó': 'cura',
+    'estou com muita dor': 'cura',
+    'ore pela minha mãe': 'familia',
+    'meu irmão está preso': 'familia',
+    'orem pelo meu pai': 'familia',
+    'chorei muito hoje': 'tristeza',
+    'graças a Deus': 'gratidao',
   };
   for (const [texto, tema] of Object.entries(casos)) assert.equal(v.temaDe(texto), tema, texto);
 });

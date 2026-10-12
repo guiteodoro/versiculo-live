@@ -88,7 +88,12 @@ $('form-conexao').addEventListener('submit', async (e) => {
 
 for (const campo of AJUSTES) {
   $(campo).addEventListener('change', async () => {
-    const config = await window.vl.config.salvar({ [campo]: Number($(campo).value) });
+    const bruto = $(campo).value.trim();
+    const valor = Number(bruto);
+    // Campo vazio ou que não é número: ignora e volta ao valor atual.
+    const config = bruto === '' || !Number.isFinite(valor)
+      ? await window.vl.config.ler()
+      : await window.vl.config.salvar({ [campo]: valor });
     preencherAjustes(config);
   });
 }

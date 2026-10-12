@@ -30,7 +30,7 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
   novoEstado();
 
   function copiaUsuario(usuario) {
-    return { ...usuario, arroba: cortar(usuario.arroba, 22) };
+    return { ...usuario, arroba: cortar(usuario.arroba ?? usuario.nome ?? '', 22) };
   }
 
   function bloqueado(usuario) {

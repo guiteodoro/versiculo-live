@@ -163,84 +163,6 @@
       ]
     },
     {
-      "id": "familia",
-      "palavras": [
-        "familia",
-        "familias",
-        "familiares",
-        "filho",
-        "filha",
-        "filhos",
-        "filhas",
-        "marido",
-        "esposa",
-        "esposo",
-        "casamento",
-        "casal",
-        "neto",
-        "neta",
-        "netos"
-      ],
-      "versiculos": [
-        {
-          "ref": "Salmos 127:3",
-          "texto": "Eis que os filhos são um presente do SENHOR; o fruto do ventre é uma recompensa."
-        },
-        {
-          "ref": "Provérbios 22:6",
-          "texto": "Instrui ao menino em seu caminho, e até quando envelhecer, não se desviará dele."
-        },
-        {
-          "ref": "Efésios 6:4",
-          "texto": "Pais, não provoqueis à ira os vossos filhos, mas criai-os na disciplina e correção do Senhor."
-        },
-        {
-          "ref": "Colossenses 3:20",
-          "texto": "Filhos, obedecei em tudo aos pais, porque isso é agradável ao Senhor."
-        },
-        {
-          "ref": "Êxodo 20:12",
-          "texto": "Honra a teu pai e a tua mãe, para que teus dias se alarguem na terra que o SENHOR teu Deus te dá."
-        },
-        {
-          "ref": "Salmos 128:3",
-          "texto": "Tua mulher será como a videira frutífera, ao lado de tua casa; e teus filhos como plantas de oliveira ao redor de tua mesa."
-        },
-        {
-          "ref": "Atos 16:31",
-          "texto": "E eles lhe disseram: Crê no Senhor Jesus Cristo, e serás salvo, tu e a tua casa."
-        },
-        {
-          "ref": "Efésios 5:25",
-          "texto": "Maridos, amai as vossas próprias esposas, assim como também Cristo amou a Igreja, e se entregou por ela;"
-        },
-        {
-          "ref": "Provérbios 31:10",
-          "texto": "Mulher virtuosa, quem a encontrará? Pois seu valor é muito maior que o de rubis."
-        },
-        {
-          "ref": "Salmos 103:17",
-          "texto": "Porém a bondade do SENHOR continua de eternidade em eternidade sobre os que o temem; e a justiça dele está sobre os filhos de seus filhos."
-        },
-        {
-          "ref": "Isaías 54:13",
-          "texto": "E todos os teus filhos serão ensinados pelo SENHOR; e a paz de teus filhos será abundante."
-        },
-        {
-          "ref": "Gênesis 2:24",
-          "texto": "Portanto, deixará o homem a seu pai e a sua mãe, e se achegará à sua mulher, e serão uma só carne."
-        },
-        {
-          "ref": "1 Coríntios 13:4",
-          "texto": "O amor é paciente, é bondoso; o amor não é invejoso; o amor não é orgulhoso, não é arrogante."
-        },
-        {
-          "ref": "Provérbios 17:6",
-          "texto": "A coroa dos idosos são os filhos de seus filhos; e a glória dos filhos são seus pais."
-        }
-      ]
-    },
-    {
       "id": "cura",
       "palavras": [
         "cura",
@@ -257,7 +179,10 @@
         "enfermo",
         "enferma",
         "internado",
-        "internada"
+        "internada",
+        "cure",
+        "dor",
+        "dores"
       ],
       "versiculos": [
         {
@@ -323,6 +248,90 @@
       ]
     },
     {
+      "id": "familia",
+      "palavras": [
+        "familia",
+        "familias",
+        "familiares",
+        "filho",
+        "filha",
+        "filhos",
+        "filhas",
+        "marido",
+        "esposa",
+        "esposo",
+        "casamento",
+        "casal",
+        "neto",
+        "neta",
+        "netos",
+        "mae",
+        "pai",
+        "irmao",
+        "irma",
+        "avo",
+        "avos"
+      ],
+      "versiculos": [
+        {
+          "ref": "Salmos 127:3",
+          "texto": "Eis que os filhos são um presente do SENHOR; o fruto do ventre é uma recompensa."
+        },
+        {
+          "ref": "Provérbios 22:6",
+          "texto": "Instrui ao menino em seu caminho, e até quando envelhecer, não se desviará dele."
+        },
+        {
+          "ref": "Efésios 6:4",
+          "texto": "Pais, não provoqueis à ira os vossos filhos, mas criai-os na disciplina e correção do Senhor."
+        },
+        {
+          "ref": "Colossenses 3:20",
+          "texto": "Filhos, obedecei em tudo aos pais, porque isso é agradável ao Senhor."
+        },
+        {
+          "ref": "Êxodo 20:12",
+          "texto": "Honra a teu pai e a tua mãe, para que teus dias se alarguem na terra que o SENHOR teu Deus te dá."
+        },
+        {
+          "ref": "Salmos 128:3",
+          "texto": "Tua mulher será como a videira frutífera, ao lado de tua casa; e teus filhos como plantas de oliveira ao redor de tua mesa."
+        },
+        {
+          "ref": "Atos 16:31",
+          "texto": "E eles lhe disseram: Crê no Senhor Jesus Cristo, e serás salvo, tu e a tua casa."
+        },
+        {
+          "ref": "Efésios 5:25",
+          "texto": "Maridos, amai as vossas próprias esposas, assim como também Cristo amou a Igreja, e se entregou por ela;"
+        },
+        {
+          "ref": "Provérbios 31:10",
+          "texto": "Mulher virtuosa, quem a encontrará? Pois seu valor é muito maior que o de rubis."
+        },
+        {
+          "ref": "Salmos 103:17",
+          "texto": "Porém a bondade do SENHOR continua de eternidade em eternidade sobre os que o temem; e a justiça dele está sobre os filhos de seus filhos."
+        },
+        {
+          "ref": "Isaías 54:13",
+          "texto": "E todos os teus filhos serão ensinados pelo SENHOR; e a paz de teus filhos será abundante."
+        },
+        {
+          "ref": "Gênesis 2:24",
+          "texto": "Portanto, deixará o homem a seu pai e a sua mãe, e se achegará à sua mulher, e serão uma só carne."
+        },
+        {
+          "ref": "1 Coríntios 13:4",
+          "texto": "O amor é paciente, é bondoso; o amor não é invejoso; o amor não é orgulhoso, não é arrogante."
+        },
+        {
+          "ref": "Provérbios 17:6",
+          "texto": "A coroa dos idosos são os filhos de seus filhos; e a glória dos filhos são seus pais."
+        }
+      ]
+    },
+    {
       "id": "tristeza",
       "palavras": [
         "tristeza",
@@ -339,7 +348,8 @@
         "faleceu",
         "saudade",
         "sozinho",
-        "sozinha"
+        "sozinha",
+        "chorei"
       ],
       "versiculos": [
         {
@@ -418,7 +428,8 @@
         "obrigado",
         "obrigada",
         "gloria",
-        "louvado"
+        "louvado",
+        "gracas"
       ],
       "versiculos": [
         {

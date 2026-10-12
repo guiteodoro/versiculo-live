@@ -48,8 +48,11 @@ export function criarVersiculos(dados, { aleatorio = Math.random, evitar = 10 } 
 
   // Erro de digitação (distância 1) só vale entre palavras de 5+ letras dos dois lados:
   // evita "curta" → "cura", "lutou" → "luto".
+  // Plural/singular (só um "s" no fim) não é erro de digitação: as listas já trazem
+  // as formas que valem; assim "irmao" não pega "boa noite irmãos".
   function acerta(palavra, chave) {
     if (palavra === chave) return true;
+    if (palavra === chave + 's' || chave === palavra + 's') return false;
     return palavra.length >= 5 && chave.length >= 5 && distancia(palavra, chave) <= 1;
   }
 

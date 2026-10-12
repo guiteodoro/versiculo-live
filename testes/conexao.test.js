@@ -200,6 +200,33 @@ test('streamEnd: terminou e não reconecta', async (t) => {
   assert.equal(ultimo(estados).estado, 'terminou');
 });
 
+test('streamEnd suspenso: trata como queda e reconecta em 5 s', async (t) => {
+  const { conexao, clientes, estados } = preparar(t);
+  conexao.conectar('fulano');
+  await esvaziar();
+  clientes[0].emit('streamEnd', { action: 4 }); // CONTROL_ACTION_STREAM_SUSPENDED
+  clientes[0].emit('disconnected', {}); // a biblioteca desconecta logo depois
+  assert.deepEqual(ultimo(estados), { estado: 'reconectando', arroba: 'fulano' });
+  assert.equal(nomesDosEstados(estados).filter((e) => e === 'reconectando').length, 1);
+  await avancar(t, 4_999);
+  assert.equal(clientes.length, 1);
+  await avancar(t, 1);
+  assert.equal(clientes.length, 2);
+  assert.equal(ultimo(estados).estado, 'no_ar');
+  await conexao.desconectar();
+});
+
+test('streamEnd com ação desconhecida: também reconecta', async (t) => {
+  const { conexao, clientes, estados } = preparar(t);
+  conexao.conectar('fulano');
+  await esvaziar();
+  clientes[0].emit('streamEnd', {});
+  assert.deepEqual(ultimo(estados), { estado: 'reconectando', arroba: 'fulano' });
+  await avancar(t, 5_000);
+  assert.equal(clientes.length, 2);
+  await conexao.desconectar();
+});
+
 test('trocar de @ descarta eventos da conexão antiga', async (t) => {
   const { conexao, clientes, eventos, estados } = preparar(t);
   conexao.conectar('antigo');

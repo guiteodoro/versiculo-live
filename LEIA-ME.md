@@ -6,6 +6,11 @@ App que acompanha a sua live no TikTok e mostra versículos numa tela vertical (
 
 Dê dois cliques no atalho **Versículo Live** na área de trabalho. Abre sem janela preta de terminal.
 Se o atalho sumir, rode `criar-atalho.ps1` (botão direito > Executar com o PowerShell) na pasta do projeto.
+Se o Windows bloquear o script, abra o PowerShell na pasta do projeto e rode:
+
+```
+powershell -ExecutionPolicy Bypass -File criar-atalho.ps1
+```
 
 ## Primeiro uso
 
@@ -24,7 +29,7 @@ Clique em **Abrir pasta de dados**. Os arquivos ficam em `%APPDATA%\versiculo-li
 - `versiculos.json`: os versículos exibidos.
 - `bloqueadas.txt`: palavras que não devem aparecer (uma por linha).
 
-Depois de editar, clique em **Conectar** de novo para recarregar.
+Os arquivos são lidos de novo quando você clica em **Desconectar** e depois em **Conectar**. Isso também zera a fila de comentários e a barra de curtidas, então **edite antes de começar a live**.
 
 O app só copia o `versiculos.json` do projeto para essa pasta quando ele ainda não existe lá. Para receber uma versão nova dos versículos (por exemplo, depois de atualizar o projeto), apague `%APPDATA%\versiculo-live\dados\versiculos.json` e abra o app de novo (as suas edições nesse arquivo serão perdidas).
 

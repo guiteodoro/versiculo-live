@@ -1,13 +1,13 @@
 // Liga numa live do TikTok, repassa os eventos no formato padrão e cuida de
 // tentar de novo quando não há live ou a conexão cai.
-import { TikTokLiveConnection, WebcastEvent, ControlEvent, UserOfflineError } from 'tiktok-live-connector';
+import { TikTokLiveConnection, WebcastEvent, ControlEvent, ControlAction, UserOfflineError } from 'tiktok-live-connector';
 import { limparArroba, deChat, deGift, deFollow, deLike, espectadoresDe } from './adaptador.js';
 
 const ESPERAS_QUEDA_MS = [5_000, 10_000, 20_000, 30_000]; // depois, sempre o último
 const ESPERA_SEM_LIVE_MS = 30_000;
 
 function clientePadrao(arroba) {
-  return new TikTokLiveConnection(arroba, { enableExtendedGiftInfo: true, processInitialData: false });
+  return new TikTokLiveConnection(arroba, { enableExtendedGiftInfo: false, processInitialData: false });
 }
 
 // aoErro(texto, erro): linha em português com o contexto + o erro original, para o log.
@@ -76,18 +76,29 @@ export function criarConexao({ criarCliente = clientePadrao, aoEvento, aoEstado,
       aoEstado({ estado: 'no_ar', arroba, espectadores });
     });
 
-    atual.on(WebcastEvent.STREAM_END, () => {
-      if (!valida()) return;
-      encerrarAtual(); // a live acabou: nada mais desta geração conta
-      aoEstado({ estado: 'terminou', arroba, mensagem: 'A live terminou' });
-    });
-
-    atual.on(ControlEvent.DISCONNECTED, () => {
-      if (!valida() || !noAr) return;
+    function caiu() {
       noAr = false;
       emReconexao = true;
       aoEstado({ estado: 'reconectando', arroba });
       agendar(minhaGeracao, proximaEsperaQueda());
+    }
+
+    // A biblioteca emite streamEnd para live encerrada E para live suspensa.
+    // Só ENDED é o fim; suspensa (ou ação desconhecida) é tratada como queda.
+    atual.on(WebcastEvent.STREAM_END, (dado) => {
+      if (!valida()) return;
+      if (dado?.action === ControlAction.CONTROL_ACTION_STREAM_ENDED) {
+        encerrarAtual(); // a live acabou: nada mais desta geração conta
+        aoEstado({ estado: 'terminou', arroba, mensagem: 'A live terminou' });
+        return;
+      }
+      if (!noAr) return;
+      caiu();
+    });
+
+    atual.on(ControlEvent.DISCONNECTED, () => {
+      if (!valida() || !noAr) return;
+      caiu();
     });
 
     // Erros depois de conectado (ex.: mensagem que não decodificou) só vão para o log;

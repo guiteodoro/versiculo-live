@@ -23,9 +23,10 @@ function texto(valor) {
 }
 
 export function usuarioDe(u) {
-  const arroba = texto(u.uniqueId) ?? texto(u.displayId);
-  const nome = texto(u.nickname) ?? arroba;
-  const id = texto(u.userId) ?? texto(u.id) ?? arroba ?? nome ?? 'desconhecido';
+  const nick = texto(u.nickname);
+  const arroba = texto(u.uniqueId) ?? texto(u.displayId) ?? nick ?? 'alguém';
+  const nome = nick ?? arroba;
+  const id = texto(u.userId) ?? texto(u.id) ?? texto(u.uniqueId) ?? texto(u.displayId) ?? nick ?? 'desconhecido';
   const foto =
     primeiraUrl(u.profilePicture) ?? primeiraUrl(u.avatarThumb) ?? null;
   return { id, arroba, nome, foto };
@@ -47,7 +48,8 @@ export function deGift(d) {
     tipo: 'presente-bruto',
     usuario: usuarioDe(d.user),
     presente: {
-      nome: d.giftDetails?.giftName ?? d.extendedGiftInfo?.name ?? d.gift?.name ?? 'presente',
+      nome:
+        texto(d.giftDetails?.giftName) ?? texto(d.gift?.name) ?? texto(d.extendedGiftInfo?.name) ?? 'presente',
       quantidade: d.repeatCount || 1,
       diamantes: d.giftDetails?.diamondCount ?? d.gift?.diamondCount ?? 0,
       imagem: primeiraUrl(d.giftDetails?.giftImage) ?? primeiraUrl(d.gift?.image) ?? null,

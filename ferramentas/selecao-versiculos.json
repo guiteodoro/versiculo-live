@@ -13,23 +13,23 @@
       "refs": ["Isaías 41:10", "Josué 1:9", "Salmos 27:1", "Salmos 56:3", "Salmos 23:4", "2 Timóteo 1:7", "Deuteronômio 31:8", "Salmos 34:4", "Salmos 118:6", "Hebreus 13:6", "Salmos 91:1-2", "Salmos 91:5", "1 João 4:18", "Marcos 5:36", "Isaías 41:13"]
     },
     {
-      "id": "familia",
-      "palavras": ["familia", "familias", "familiares", "filho", "filha", "filhos", "filhas", "marido", "esposa", "esposo", "casamento", "casal", "neto", "neta", "netos"],
-      "refs": ["Salmos 127:3", "Provérbios 22:6", "Efésios 6:4", "Colossenses 3:20", "Êxodo 20:12", "Salmos 128:3", "Atos 16:31", "Efésios 5:25", "Provérbios 31:10", "Salmos 103:17", "Isaías 54:13", "Gênesis 2:24", "1 Coríntios 13:4", "Provérbios 17:6"]
-    },
-    {
       "id": "cura",
-      "palavras": ["cura", "curar", "curado", "curada", "doente", "doenca", "saude", "hospital", "cirurgia", "tumor", "cancer", "enfermo", "enferma", "internado", "internada"],
+      "palavras": ["cura", "curar", "curado", "curada", "doente", "doenca", "saude", "hospital", "cirurgia", "tumor", "cancer", "enfermo", "enferma", "internado", "internada", "cure", "dor", "dores"],
       "refs": ["Jeremias 17:14", "Salmos 103:2-3", "Salmos 147:3", "Isaías 53:5", "Tiago 5:15", "Tiago 5:16", "3 João 1:2", "Jeremias 33:6", "Mateus 9:35", "Marcos 5:34", "Salmos 41:3", "Salmos 30:2", "Malaquias 4:2", "Mateus 8:17", "Salmos 6:2"]
     },
     {
+      "id": "familia",
+      "palavras": ["familia", "familias", "familiares", "filho", "filha", "filhos", "filhas", "marido", "esposa", "esposo", "casamento", "casal", "neto", "neta", "netos", "mae", "pai", "irmao", "irma", "avo", "avos"],
+      "refs": ["Salmos 127:3", "Provérbios 22:6", "Efésios 6:4", "Colossenses 3:20", "Êxodo 20:12", "Salmos 128:3", "Atos 16:31", "Efésios 5:25", "Provérbios 31:10", "Salmos 103:17", "Isaías 54:13", "Gênesis 2:24", "1 Coríntios 13:4", "Provérbios 17:6"]
+    },
+    {
       "id": "tristeza",
-      "palavras": ["tristeza", "triste", "tristes", "chorando", "choro", "chorar", "deprimido", "deprimida", "depressao", "luto", "falecimento", "faleceu", "saudade", "sozinho", "sozinha"],
+      "palavras": ["tristeza", "triste", "tristes", "chorando", "choro", "chorar", "deprimido", "deprimida", "depressao", "luto", "falecimento", "faleceu", "saudade", "sozinho", "sozinha", "chorei"],
       "refs": ["Salmos 30:5", "Mateus 5:4", "João 16:33", "Salmos 42:11", "Lamentações 3:22-23", "Romanos 8:28", "Salmos 126:5", "Salmos 73:26", "João 14:18", "Salmos 9:9", "Romanos 15:13", "Salmos 30:11", "João 16:22", "Salmos 119:50", "2 Coríntios 4:16"]
     },
     {
       "id": "gratidao",
-      "palavras": ["gratidao", "grato", "grata", "gratos", "agradecer", "agradeco", "agradecido", "agradecida", "obrigado", "obrigada", "gloria", "louvado"],
+      "palavras": ["gratidao", "grato", "grata", "gratos", "agradecer", "agradeco", "agradecido", "agradecida", "obrigado", "obrigada", "gloria", "louvado", "gracas"],
       "refs": ["1 Tessalonicenses 5:18", "Salmos 100:4", "Salmos 107:1", "Salmos 118:24", "Salmos 103:1", "Colossenses 3:15", "Colossenses 3:17", "Salmos 136:1", "Efésios 5:20", "Salmos 9:1", "Salmos 28:7", "Salmos 92:1", "Salmos 107:8", "Salmos 95:2", "Salmos 34:1"]
     },
     {

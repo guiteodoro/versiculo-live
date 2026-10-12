@@ -272,3 +272,16 @@ test('parar cancela timers e ignora eventos', (t) => {
   diretor.receber(k(5000));
   assert.equal(msgs.length, n);
 });
+
+test('presente de quem não tem @ nem nome não se perde', (t) => {
+  const { diretor, cartoes, de } = novo(t);
+  diretor.receber({
+    tipo: 'presente',
+    usuario: { id: 'desconhecido', arroba: undefined, nome: undefined, foto: null },
+    presente: { nome: 'Rosa', quantidade: 1, diamantes: 1, imagem: null },
+  });
+  assert.equal(cartoes().length, 1);
+  assert.equal(cartoes()[0].tipo, 'presente');
+  assert.equal(typeof cartoes()[0].usuario.arroba, 'string');
+  assert.equal(de('registro').length, 1);
+});

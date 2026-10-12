@@ -89,3 +89,19 @@ test('evento sem user vira null', () => {
   assert.equal(deLike({ count: 3 }), null);
   assert.equal(deChat(undefined), null);
 });
+
+test('usuarioDe: arroba nunca fica vazia (displayId → nickname → "alguém")', () => {
+  assert.equal(usuarioDe({ uniqueId: '', displayId: 'pelo_display' }).arroba, 'pelo_display');
+  assert.equal(usuarioDe({ uniqueId: '', displayId: '', nickname: 'Só Nome' }).arroba, 'Só Nome');
+  assert.equal(usuarioDe({ uniqueId: '', displayId: '' }).arroba, 'alguém');
+  assert.equal(usuarioDe({}).arroba, 'alguém');
+  assert.equal(usuarioDe({}).nome, 'alguém');
+});
+
+test('nome do presente: gift.name antes de extendedGiftInfo, vazio vira "presente"', () => {
+  const user = { uniqueId: 'fulano' };
+  assert.equal(deGift({ user, gift: { name: 'Rose' }, extendedGiftInfo: { name: 'Outro' } }).presente.nome, 'Rose');
+  assert.equal(deGift({ user, gift: { name: '' }, extendedGiftInfo: { name: 'Leão' } }).presente.nome, 'Leão');
+  assert.equal(deGift({ user, gift: { name: '' } }).presente.nome, 'presente');
+  assert.equal(deGift({ user, giftDetails: { giftName: '' }, gift: { name: '' } }).presente.nome, 'presente');
+});

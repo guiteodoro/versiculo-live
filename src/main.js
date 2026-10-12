@@ -310,6 +310,11 @@ async function abrirPasta(pasta) {
 
 function erroNaoTratado(tipo, e) {
   log.erro(`Erro não tratado (${tipo})`, e);
+  // Conectado e funcionando: não derruba um estado bom, só avisa.
+  if (estadoAtual.estado === 'no_ar') {
+    avisar('Aconteceu um erro inesperado. Os detalhes estão no log.');
+    return;
+  }
   enviarEstado({
     estado: 'erro',
     arroba: estadoAtual.arroba,

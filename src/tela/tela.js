@@ -237,6 +237,14 @@
 
   // ---- cartões ----
 
+  // 🌹 só para Rose/Rosa; nome vazio vira "presente"; sem espaço duplo.
+  function textoSelo(presente) {
+    const nome = String(presente?.nome ?? '').trim() || 'presente';
+    const icone = /^(rose|rosa)$/i.test(nome) ? '🌹' : '🎁';
+    const partes = [icone, presente?.quantidade, nome].filter((x) => x !== undefined && x !== null && x !== '');
+    return `${partes.join(' ')} · obrigado!`;
+  }
+
   function mostrarCartao(msg) {
     const unidade = el('div', 'unidade');
     let caixa;
@@ -261,8 +269,7 @@
       p = verso(msg.versiculo);
       baseVh = 3.65;
       if (presente) {
-        const { quantidade, nome } = msg.presente ?? {};
-        caixa.append(el('div', 'selo', `🌹 ${quantidade ?? ''} ${nome ?? ''} · obrigado!`));
+        caixa.append(el('div', 'selo', textoSelo(msg.presente)));
       }
       caixa.append(linhaUsuario(msg.usuario), p, referencia(msg.versiculo));
       unidade.append(caixa);
