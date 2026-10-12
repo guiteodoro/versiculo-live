@@ -46,8 +46,11 @@ export function criarVersiculos(dados, { aleatorio = Math.random, evitar = 10 } 
     .map((t) => ({ id: t.id, chaves: t.palavras.map(normalizar).filter((p) => p !== '') }));
   const historico = []; // refs, do mais antigo para o mais recente
 
+  // Erro de digitação (distância 1) só vale entre palavras de 5+ letras dos dois lados:
+  // evita "curta" → "cura", "lutou" → "luto".
   function acerta(palavra, chave) {
-    return palavra === chave || (palavra.length >= 5 && distancia(palavra, chave) <= 1);
+    if (palavra === chave) return true;
+    return palavra.length >= 5 && chave.length >= 5 && distancia(palavra, chave) <= 1;
   }
 
   function temaDe(texto) {

@@ -92,6 +92,12 @@ test('dados/versiculos.json: comentários vão para o tema certo', () => {
     'salve galera': 'geral',
     'Deus abençoe': 'geral',
     'por favor': 'geral',
+    'tenho um pedido de oração': 'geral',
+    'tô perdida aqui na live': 'geral',
+    'curta a live galera': 'geral',
+    'curta e compartilhe': 'geral',
+    'lutou muito': 'geral',
+    'preciso de cura': 'cura',
   };
   for (const [texto, tema] of Object.entries(casos)) assert.equal(v.temaDe(texto), tema, texto);
 });

@@ -30,7 +30,7 @@ O app só copia o `versiculos.json` do projeto para essa pasta quando ele ainda 
 
 ## Tradução bíblica
 
-Todas as Escrituras em português citadas são da Bíblia Livre (BLIVRE), Copyright © Diego Santos, Mario Sérgio e Marco Teles, fevereiro de 2018. Licença Creative Commons Atribuição 4.0 Brasil: <https://ebible.org/porbr2018/copyright.htm>.
+Todas as Escrituras em português citadas são da Bíblia Livre (BLIVRE), Copyright © Diego Santos, Mario Sérgio e Marco Teles, fevereiro de 2018. Licença Creative Commons Atribuição 4.0 Brasil: <https://ebible.org/porbr2018/copyright.htm> (texto da licença: <https://creativecommons.org/licenses/by/4.0/>).
 
 A tela mostra o crédito "BLIVRE" no canto inferior direito. Os textos foram copiados sem alteração do arquivo USFM do eBible.org (`porbr2018`), só sem as notas de rodapé, pela ferramenta `ferramentas/extrair-versiculos.mjs` (a lista de referências e palavras-chave fica em `ferramentas/selecao-versiculos.json`).
 
