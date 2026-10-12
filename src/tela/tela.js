@@ -9,6 +9,8 @@
   const DURACAO_PADRAO_MS = 8000;
   const FONTE_MIN_PX = 14;
   const PASSO_FONTE_PX = 2;
+  const ARROBA_MIN_PX = 11;
+  const ARROBA_VH = 3.4;
 
   const palco = document.getElementById('palco');
   const faixas = document.getElementById('faixas');
@@ -75,6 +77,19 @@
       px = Math.max(FONTE_MIN_PX, px - PASSO_FONTE_PX);
       p.style.fontSize = `${px}px`;
     }
+  }
+
+  // @ longo: diminui a fonte (1px por passo) até caber na linha; abaixo do mínimo, quebra.
+  function ajustarArroba(span, baseVh) {
+    if (!span) return;
+    span.classList.remove('quebra');
+    let px = Math.max(ARROBA_MIN_PX, Math.round((window.innerHeight * baseVh) / 100));
+    span.style.fontSize = `${px}px`;
+    while (span.scrollWidth > span.clientWidth && px > ARROBA_MIN_PX) {
+      px -= 1;
+      span.style.fontSize = `${px}px`;
+    }
+    if (span.scrollWidth > span.clientWidth) span.classList.add('quebra');
   }
 
   // ---- camada: um elemento por vez, com troca rápida e saída esmaecendo ----
@@ -259,7 +274,10 @@
     camadaCartao.mostrar(unidade, msg.duracaoMs, {
       aoSair: modoLuz ? () => luz.desligar(unidade) : undefined,
     });
-    unidade.ajustar = () => ajustarFonte(caixa, p, baseVh);
+    unidade.ajustar = () => {
+      ajustarArroba(caixa.querySelector('.arroba'), ARROBA_VH); // antes: a altura da linha afeta o versículo
+      ajustarFonte(caixa, p, baseVh);
+    };
     unidade.ajustar();
     if (modoLuz) luz.ligar(unidade, modoLuz);
   }

@@ -353,6 +353,18 @@ function autoteste() {
   passos.push(
     [arrobaLongo + 1500, cartaoTeste('verso.longo', 'Versículo longo de teste. '.repeat(16), null)],
     [arrobaLongo + 3300, cartaoTeste('foto.falhou', 'Versículo curto de teste.', 'https://127.0.0.1:1/foto.jpg')],
+    // @ de 30 caracteres (o diretor corta em 22 + "…") também no presente e na faixa
+    [arrobaLongo + 5000, () => rotear({
+      tipo: 'presente-bruto',
+      usuario: { id: 'autoteste-longo', arroba: 'abcdefghij'.repeat(3), nome: 'Teste Longo', foto: null },
+      presente: { nome: 'Rosa', quantidade: 5, diamantes: 1, imagem: null },
+      sequencia: false,
+      fim: true,
+    })],
+    [arrobaLongo + 6200, () => rotear({
+      tipo: 'seguiu',
+      usuario: { id: 'autoteste-longo-seguidor', arroba: 'klmnopqrst'.repeat(3), nome: 'Seguidor Longo', foto: null },
+    })],
   );
   const capturas = [
     [1450, '01-comentario'],
@@ -363,8 +375,10 @@ function autoteste() {
     [arrobaLongo + 800, '06-arroba-longo'],
     [arrobaLongo + 2300, '07-versiculo-longo'],
     [arrobaLongo + 4300, '08-foto-falhou'],
+    [arrobaLongo + 5800, '09-arroba-longo-presente'],
+    [arrobaLongo + 7000, '10-arroba-longo-faixa'],
   ];
-  const fim = arrobaLongo + 5000;
+  const fim = arrobaLongo + 7600;
   // fim de live simulado (a conexão real emite isto e para de tentar): o botão deve voltar a Conectar
   passos.push([9000, async () => {
     await desconectar();
@@ -394,6 +408,9 @@ function autoteste() {
         cartao: u ? u.className + ' > ' + caixa.className : null,
         selo: q('.selo')?.textContent ?? null,
         usuario: q('.arroba')?.textContent ?? null,
+        arrobaCabe: q('.arroba') ? q('.arroba').scrollWidth <= q('.arroba').clientWidth : null,
+        fonteArroba: q('.arroba')?.style.fontSize ?? null,
+        arrobaQuebra: q('.arroba')?.classList.contains('quebra') ?? null,
         avatar: q('.avatar') ? q('.avatar').tagName + ' ' + q('.avatar').textContent : null,
         fonteVerso: q('.verso')?.style.fontSize ?? null,
         transborda: caixa ? caixa.scrollHeight > caixa.clientHeight + 1 : null,

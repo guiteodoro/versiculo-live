@@ -126,11 +126,17 @@ body {
   font-size: 3.4vh;
   font-weight: 700;
 }
+/* @ longo (até 22 + "…"): o JS diminui a fonte até caber; nunca corta. */
 .usuario .arroba {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+}
+.usuario .arroba.quebra { /* último recurso, abaixo da fonte mínima: quebra a linha */
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .avatar {
