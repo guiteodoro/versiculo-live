@@ -21,6 +21,7 @@ import { criarSimulador } from './nucleo/simulador.js';
 const PASTA_SRC = path.dirname(fileURLToPath(import.meta.url));
 const PASTA_DADOS_PROJETO = path.join(PASTA_SRC, '..', 'dados');
 const ARQUIVOS_DADOS = ['versiculos.json', 'bloqueadas.txt'];
+const ICONE = path.join(PASTA_SRC, '..', 'icone.ico');
 const MAX_REGISTROS = 50;
 const AJUSTES = ['esperaMin', 'tempoComentarioS', 'tempoPresenteS', 'metaCurtidas'];
 const TESTES = ['comentario', 'presente', 'seguidor', 'curtidas'];
@@ -200,6 +201,7 @@ function criarControle() {
     minWidth: 600,
     minHeight: 480,
     title: 'Versículo Live',
+    icon: ICONE,
     backgroundColor: '#14161c',
     autoHideMenuBar: true,
     webPreferences,
@@ -229,6 +231,7 @@ function abrirTela() {
     width: 540,
     height: 960,
     title: 'Versículo Live — Tela',
+    icon: ICONE,
     backgroundColor: '#0b1026',
     autoHideMenuBar: true,
     webPreferences: { ...webPreferences, backgroundThrottling: false }, // animações seguem com a janela atrás
