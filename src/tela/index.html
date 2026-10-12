@@ -5,8 +5,16 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:">
   <meta name="color-scheme" content="dark">
   <title>Versículo Live — Tela</title>
+  <link rel="stylesheet" href="tela.css">
+  <script src="tela.js" defer></script>
 </head>
 <body>
-  <div id="raiz"></div>
+  <div id="curtidas" class="oculto">
+    <div class="rotulo"><span>❤ curtidas</span><span id="curtidas-numeros"></span></div>
+    <div class="barra"><i id="curtidas-preenchido"></i></div>
+  </div>
+  <div id="palco"></div>
+  <canvas id="luz"></canvas>
+  <div id="faixas"></div>
 </body>
 </html>

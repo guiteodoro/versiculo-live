@@ -229,7 +229,7 @@ function abrirTela() {
     title: 'Versículo Live — Tela',
     backgroundColor: '#0b1026',
     autoHideMenuBar: true,
-    webPreferences,
+    webPreferences: { ...webPreferences, backgroundThrottling: false }, // animações seguem com a janela atrás
   });
   tela.setAspectRatio(9 / 16);
   travarNavegacao(tela);
@@ -321,6 +321,25 @@ function autoteste() {
     [3000, () => conectar('@@@')],
   ];
   if (ARROBA_AUTOTESTE) passos.push([5000, () => conectar(ARROBA_AUTOTESTE)]);
+  // tela: faixa, meta de curtidas, @ de 30 caracteres com foto que falha e versículo longo
+  passos.push(
+    [2000, () => simulador.seguidor()],
+    [4000, () => simulador.curtidas(500)],
+    [4500, () => simulador.curtidas(500)],
+    [5500, () => rotear({
+      tipo: 'comentario',
+      usuario: { id: 'autoteste-longo', arroba: 'abcdefghij'.repeat(3), nome: 'Teste Longo', foto: 'https://127.0.0.1:1/foto.jpg' },
+      texto: 'paz',
+    })],
+    [27000, () => enviar(tela, 'vl:aoMostrar', {
+      canal: 'cartao',
+      tipo: 'comentario',
+      usuario: { id: 'autoteste-verso', arroba: 'verso.longo', nome: 'Verso Longo', foto: 'https://127.0.0.1:1/foto.jpg' },
+      versiculo: { ref: 'Teste 1:1', texto: 'Versículo longo de teste. '.repeat(16), tema: 'geral' },
+      duracaoMs: 3000,
+      aSeguir: { arrobas: ['a', 'b'], resto: 0 },
+    })],
+  );
   // fim de live simulado (a conexão real emite isto e para de tentar): o botão deve voltar a Conectar
   passos.push([9000, async () => {
     await desconectar();
@@ -339,11 +358,38 @@ function autoteste() {
   };
   for (const ms of [2500, 4000, 8000, 15000]) setTimeout(() => conferir().catch((e) => log.erro('autoteste', e)), ms);
   controle?.webContents.on('console-message', (e) => log.info(`autoteste: console ${e.level}: ${e.message}`));
+  // o que a tela mostra, para conferir pelo log
+  const conferirTela = async () => {
+    if (!tela || tela.isDestroyed()) return;
+    const visto = await tela.webContents.executeJavaScript(`(() => {
+      const u = document.querySelector('#palco .unidade:not(.trocando):not(.saindo)');
+      const q = (s) => (u && u.querySelector(s)) || null;
+      const caixa = q('.cartao, .cheia');
+      return {
+        cartao: u ? u.className + ' > ' + caixa.className : null,
+        selo: q('.selo')?.textContent ?? null,
+        usuario: q('.arroba')?.textContent ?? null,
+        avatar: q('.avatar') ? q('.avatar').tagName + ' ' + q('.avatar').textContent : null,
+        fonteVerso: q('.verso')?.style.fontSize ?? null,
+        transborda: caixa ? caixa.scrollHeight > caixa.clientHeight + 1 : null,
+        aSeguir: q('.a-seguir')?.textContent ?? null,
+        faixa: document.querySelector('.faixa:not(.trocando):not(.saindo) .chegou')?.textContent ?? null,
+        curtidas: document.getElementById('curtidas-numeros').textContent,
+        barra: document.getElementById('curtidas-preenchido').style.width,
+        tamanho: innerWidth + 'x' + innerHeight,
+      };
+    })()`);
+    log.info(`autoteste: tela ${JSON.stringify(visto)}`);
+  };
+  for (const ms of [1300, 2500, 5000, 7000, 14500, 25000, 27500]) {
+    setTimeout(() => conferirTela().catch((e) => log.erro('autoteste', e)), ms);
+  }
+  tela?.webContents.on('console-message', (e) => log.info(`autoteste: tela console ${e.level}: ${e.message}`));
   for (const [ms, passo] of passos) setTimeout(() => seguro('autoteste', passo), ms);
   setTimeout(() => {
     log.info('autoteste: fim');
     app.quit();
-  }, 20_000);
+  }, 31_000);
 }
 
 // ---- início ----
