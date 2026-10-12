@@ -30,6 +30,7 @@ function preparar(t, resultados = ['ok']) {
   const clientes = [];
   const eventos = [];
   const estados = [];
+  const erros = [];
   const conexao = criarConexao({
     criarCliente: (arroba) => {
       const resultado = resultados[Math.min(clientes.length, resultados.length - 1)];
@@ -39,8 +40,9 @@ function preparar(t, resultados = ['ok']) {
     },
     aoEvento: (e) => eventos.push(e),
     aoEstado: (e) => estados.push(e),
+    aoErro: (texto, erro) => erros.push({ texto, erro }),
   });
-  return { conexao, clientes, eventos, estados };
+  return { conexao, clientes, eventos, estados, erros };
 }
 
 const esvaziar = async () => {
@@ -56,7 +58,7 @@ const nomesDosEstados = (estados) => estados.map((e) => e.estado);
 const ultimo = (lista) => lista[lista.length - 1];
 
 test('conecta e repassa eventos', async (t) => {
-  const { conexao, clientes, eventos, estados } = preparar(t);
+  const { conexao, clientes, eventos, estados, erros } = preparar(t);
   conexao.conectar('@Dono.Live');
   assert.equal(clientes.length, 1);
   assert.equal(clientes[0].arroba, 'dono.live');
@@ -82,8 +84,12 @@ test('conecta e repassa eventos', async (t) => {
   c.emit('roomUser', { viewerCount: 60 });
   assert.equal(ultimo(estados).espectadores, 60);
 
-  c.emit('error', { info: 'falha qualquer', exception: new Error('x') });
-  assert.equal(ultimo(estados).estado, 'no_ar');
+  const excecao = new Error('x');
+  c.emit('error', { info: 'falha qualquer', exception: excecao });
+  assert.equal(ultimo(estados).estado, 'no_ar', 'erro em execução não muda o estado');
+  assert.equal(erros.length, 1);
+  assert.equal(erros[0].erro, excecao);
+  assert.equal(erros[0].texto, 'Erro na conexão com a live de @dono.live (falha qualquer)');
 
   await conexao.desconectar();
   assert.equal(c.desconectado, true);
@@ -96,7 +102,7 @@ test('conecta e repassa eventos', async (t) => {
 
 test('offline: sem_live e tenta de novo em 30 s', async (t) => {
   const offline = new UserOfflineError('offline');
-  const { conexao, clientes, estados } = preparar(t, [offline, offline, 'ok']);
+  const { conexao, clientes, estados, erros } = preparar(t, [offline, offline, 'ok']);
   conexao.conectar('fulano');
   await esvaziar();
   assert.deepEqual(ultimo(estados), {
@@ -104,6 +110,7 @@ test('offline: sem_live e tenta de novo em 30 s', async (t) => {
     arroba: 'fulano',
     mensagem: 'Não encontrei live ativa em @fulano',
   });
+  assert.equal(erros.length, 0, 'sem live não é erro de log');
   await avancar(t, 29_999);
   assert.equal(clientes.length, 1);
   await avancar(t, 1);
@@ -119,7 +126,7 @@ test('offline: sem_live e tenta de novo em 30 s', async (t) => {
 
 test('queda: reconecta em 5, 10, 20, 30, 30 s', async (t) => {
   const falha = new Error('rede caiu');
-  const { conexao, clientes, estados } = preparar(t, ['ok', falha]);
+  const { conexao, clientes, estados, erros } = preparar(t, ['ok', falha]);
   conexao.conectar('fulano');
   await esvaziar();
   assert.equal(ultimo(estados).estado, 'no_ar');
@@ -132,8 +139,36 @@ test('queda: reconecta em 5, 10, 20, 30, 30 s', async (t) => {
     assert.equal(clientes.length, i + 1, `antes de ${espera} ms`);
     await avancar(t, 1);
     assert.equal(clientes.length, i + 2, `depois de ${espera} ms`);
-    assert.deepEqual(ultimo(estados), { estado: 'erro', arroba: 'fulano', mensagem: 'rede caiu' });
+    assert.deepEqual(ultimo(estados), {
+      estado: 'reconectando',
+      arroba: 'fulano',
+      mensagem: 'Conexão perdida com a live de @fulano. Tentando de novo…',
+    });
   }
+  assert.equal(erros.length, 5);
+  assert.equal(erros[0].erro, falha);
+  assert.equal(erros[0].texto, 'Falha ao conectar na live de @fulano');
+  await conexao.desconectar();
+});
+
+test('primeira conexão com erro desconhecido: erro em português e tenta em 5, 10 s', async (t) => {
+  const falha = new Error('Unexpected server response: 500');
+  const { conexao, clientes, estados, erros } = preparar(t, [falha]);
+  conexao.conectar('fulano');
+  await esvaziar();
+  assert.deepEqual(ultimo(estados), {
+    estado: 'erro',
+    arroba: 'fulano',
+    mensagem: 'Não consegui conectar na live de @fulano. Tentando de novo…',
+  });
+  assert.deepEqual(erros, [{ texto: 'Falha ao conectar na live de @fulano', erro: falha }]);
+  await avancar(t, 4_999);
+  assert.equal(clientes.length, 1);
+  await avancar(t, 1);
+  assert.equal(clientes.length, 2);
+  assert.equal(ultimo(estados).estado, 'erro', 'sem queda antes, continua erro');
+  await avancar(t, 10_000);
+  assert.equal(clientes.length, 3);
   await conexao.desconectar();
 });
 

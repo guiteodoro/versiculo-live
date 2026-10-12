@@ -10,12 +10,14 @@ function clientePadrao(arroba) {
   return new TikTokLiveConnection(arroba, { enableExtendedGiftInfo: true, processInitialData: false });
 }
 
-export function criarConexao({ criarCliente = clientePadrao, aoEvento, aoEstado }) {
+// aoErro(texto, erro): linha em português com o contexto + o erro original, para o log.
+export function criarConexao({ criarCliente = clientePadrao, aoEvento, aoEstado, aoErro = () => {} }) {
   let geracao = 0;
   let arroba = '';
   let cliente = null;
   let timer = null;
   let tentativasQueda = 0;
+  let emReconexao = false; // true desde uma queda até a próxima conexão bem-sucedida
 
   function encerrarAtual() {
     geracao++;
@@ -83,13 +85,18 @@ export function criarConexao({ criarCliente = clientePadrao, aoEvento, aoEstado 
     atual.on(ControlEvent.DISCONNECTED, () => {
       if (!valida() || !noAr) return;
       noAr = false;
+      emReconexao = true;
       aoEstado({ estado: 'reconectando', arroba });
       agendar(minhaGeracao, proximaEsperaQueda());
     });
 
-    // Erros depois de conectado (ex.: mensagem que não decodificou) não mudam o estado;
+    // Erros depois de conectado (ex.: mensagem que não decodificou) só vão para o log;
     // se a conexão cair de fato, chega 'disconnected'.
-    atual.on(ControlEvent.ERROR, () => {});
+    atual.on(ControlEvent.ERROR, (dado) => {
+      if (!valida()) return;
+      const contexto = dado?.info ? ` (${dado.info})` : '';
+      aoErro(`Erro na conexão com a live de @${arroba}${contexto}`, dado?.exception ?? dado);
+    });
 
     Promise.resolve()
       .then(() => atual.connect())
@@ -98,6 +105,7 @@ export function criarConexao({ criarCliente = clientePadrao, aoEvento, aoEstado 
           if (!valida()) return;
           noAr = true;
           tentativasQueda = 0;
+          emReconexao = false;
           aoEstado({ estado: 'no_ar', arroba, espectadores });
         },
         (erro) => {
@@ -109,7 +117,12 @@ export function criarConexao({ criarCliente = clientePadrao, aoEvento, aoEstado 
             aoEstado({ estado: 'sem_live', arroba, mensagem: `Não encontrei live ativa em @${arroba}` });
             agendar(minhaGeracao, ESPERA_SEM_LIVE_MS);
           } else {
-            aoEstado({ estado: 'erro', arroba, mensagem: erro?.message || String(erro) });
+            aoErro(`Falha ao conectar na live de @${arroba}`, erro);
+            if (emReconexao) {
+              aoEstado({ estado: 'reconectando', arroba, mensagem: `Conexão perdida com a live de @${arroba}. Tentando de novo…` });
+            } else {
+              aoEstado({ estado: 'erro', arroba, mensagem: `Não consegui conectar na live de @${arroba}. Tentando de novo…` });
+            }
             agendar(minhaGeracao, proximaEsperaQueda());
           }
         },
@@ -119,6 +132,7 @@ export function criarConexao({ criarCliente = clientePadrao, aoEvento, aoEstado 
   function conectar(bruto) {
     encerrarAtual();
     tentativasQueda = 0;
+    emReconexao = false;
     arroba = limparArroba(bruto);
     if (!arroba) {
       aoEstado({ estado: 'erro', arroba: '', mensagem: 'Digite um @ válido do TikTok.' });
