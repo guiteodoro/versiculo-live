@@ -25,6 +25,13 @@
       <label>Tempo do presente (s) <input id="tempoPresenteS" type="number" min="2" max="60" step="1"></label>
       <label>Meta de curtidas <input id="metaCurtidas" type="number" min="10" max="1000000" step="10"></label>
 
+      <h2>Música ambiente</h2>
+      <div class="musica">
+        <button type="button" id="musica-botao" aria-pressed="false">Ligar música</button>
+        <input id="musica-volume" type="range" min="0" max="100" step="5" aria-label="Volume da música">
+        <span id="musica-valor" class="musica-valor"></span>
+      </div>
+
       <h2>Testes</h2>
       <div class="grade">
         <button type="button" data-teste="comentario">Testar comentário</button>

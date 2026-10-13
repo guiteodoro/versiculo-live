@@ -22,6 +22,19 @@ powershell -ExecutionPolicy Bypass -File criar-atalho.ps1
 
 O app abre uma segunda janela chamada **Versículo Live — Tela**. No TikTok LIVE Studio, adicione uma fonte do tipo **Captura de janela** e escolha essa janela. Deixe-a aberta (pode ficar atrás de outras).
 
+Se fechar essa janela sem querer, clique em **Abrir tela da live** na janela de controle.
+
+Além dos versículos, a tela mostra sozinha:
+- uma **legenda** no rodapé explicando como a live funciona (troca a cada 8 segundos);
+- o mural **🙏 Agradecemos** com quem mandou presente;
+- a cada **2 minutos**, um cartão **"Quer receber um versículo?"** ensinando a comentar.
+
+## Música ambiente
+
+Na janela de controle, em **Música ambiente**, clique em **Ligar música** e ajuste o volume. O som é gerado pelo próprio app (acordes suaves e um sininho de vez em quando): não é uma música gravada, então não tem direitos autorais.
+
+A captura de janela **não leva o som**. Para a música ir para a live, adicione no TikTok LIVE Studio uma fonte de **áudio do aplicativo** (escolha o Versículo Live) ou de **áudio da área de trabalho**. A música também sai nas caixas de som do seu computador.
+
 ## Editar versículos e palavras bloqueadas
 
 Clique em **Abrir pasta de dados**. Os arquivos ficam em `%APPDATA%\versiculo-live\dados`:

@@ -9,6 +9,8 @@ export const PADRAO = Object.freeze({
   tempoMetaS: 10,
   metaCurtidas: 1000,
   arroba: '',
+  musica: false,
+  volumeMusica: 30,
 });
 
 const LIMITES = {
@@ -18,6 +20,7 @@ const LIMITES = {
   tempoSeguidorS: [2, 60],
   tempoMetaS: [2, 60],
   metaCurtidas: [10, 1000000],
+  volumeMusica: [0, 100],
 };
 
 export function normalizarConfig(obj) {
@@ -29,6 +32,7 @@ export function normalizarConfig(obj) {
     config[campo] = valido ? v : PADRAO[campo];
   }
   config.arroba = typeof entrada.arroba === 'string' ? entrada.arroba : PADRAO.arroba;
+  config.musica = typeof entrada.musica === 'boolean' ? entrada.musica : PADRAO.musica;
   return config;
 }
 

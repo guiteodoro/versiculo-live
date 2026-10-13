@@ -333,3 +333,43 @@ test('curtidas informam o passo da meta configurada', (t) => {
   diretor.receber(k(10));
   assert.deepEqual(de('curtidas').at(-1), { canal: 'curtidas', total: 10, meta: 500, passo: 500 });
 });
+
+const convites = (de) => de('cartao').filter((m) => m.tipo === 'convite');
+
+test('convite: a cada 2 minutos, 8 s, com linha no registro', (t) => {
+  const { diretor, de } = novo(t);
+  t.mock.timers.tick(119999);
+  assert.equal(convites(de).length, 0);
+  t.mock.timers.tick(1);
+  assert.equal(convites(de).length, 1);
+  assert.equal(convites(de)[0].duracaoMs, 8000);
+  assert.equal(de('registro').at(-1).texto, '📣 convite');
+  t.mock.timers.tick(8000);
+  t.mock.timers.tick(112000);
+  assert.equal(convites(de).length, 2, 'o próximo vem 2 min depois do anterior aparecer');
+});
+
+test('convite: espera o cartão atual, presente vem antes, comentários depois', (t) => {
+  const { diretor, cartoes } = novo(t);
+  t.mock.timers.tick(115000);
+  diretor.receber(c('ana', 'oi'));
+  t.mock.timers.tick(5000); // 2 min: convite pendente, ana ainda na tela
+  assert.equal(cartoes().at(-1).usuario.arroba, 'ana');
+  diretor.receber(c('bia', 'oi'));
+  diretor.receber(p('caio')); // presente interrompe ana
+  assert.equal(cartoes().at(-1).tipo, 'presente');
+  t.mock.timers.tick(12000);
+  assert.equal(cartoes().at(-1).tipo, 'convite');
+  t.mock.timers.tick(8000);
+  assert.equal(cartoes().at(-1).usuario.arroba, 'ana', 'comentário devolvido volta depois do convite');
+});
+
+test('convite: reiniciar recomeça a contagem', (t) => {
+  const { diretor, de } = novo(t);
+  t.mock.timers.tick(100000);
+  diretor.reiniciar();
+  t.mock.timers.tick(100000);
+  assert.equal(convites(de).length, 0);
+  t.mock.timers.tick(20000);
+  assert.equal(convites(de).length, 1);
+});

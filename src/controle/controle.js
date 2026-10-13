@@ -46,6 +46,10 @@ function desenharStatus() {
 function preencherAjustes(config) {
   if (!config) return;
   for (const campo of AJUSTES) $(campo).value = config[campo];
+  $('musica-botao').setAttribute('aria-pressed', String(config.musica === true));
+  $('musica-botao').textContent = config.musica ? 'Desligar música' : 'Ligar música';
+  $('musica-volume').value = config.volumeMusica;
+  $('musica-valor').textContent = `${config.volumeMusica}%`;
 }
 
 function adicionarEvento({ hora, texto }) {
@@ -97,6 +101,17 @@ for (const campo of AJUSTES) {
     preencherAjustes(config);
   });
 }
+
+$('musica-botao').addEventListener('click', async () => {
+  const ligada = $('musica-botao').getAttribute('aria-pressed') === 'true';
+  preencherAjustes(await window.vl.config.salvar({ musica: !ligada }));
+});
+$('musica-volume').addEventListener('input', () => {
+  $('musica-valor').textContent = `${$('musica-volume').value}%`;
+});
+$('musica-volume').addEventListener('change', async () => {
+  preencherAjustes(await window.vl.config.salvar({ volumeMusica: Number($('musica-volume').value) }));
+});
 
 for (const botao of document.querySelectorAll('[data-teste]')) {
   botao.addEventListener('click', () => window.vl.testar(botao.dataset.teste));

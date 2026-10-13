@@ -92,6 +92,12 @@ label {
 
 label input { width: 96px; text-align: right; }
 
+.musica { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.musica button { min-width: 140px; }
+.musica button[aria-pressed="true"] { background: var(--destaque); border-color: var(--destaque); color: #fff; }
+.musica input[type="range"] { flex: 1; padding: 0; accent-color: var(--destaque); }
+.musica-valor { width: 3.5em; text-align: right; color: var(--apagado); }
+
 .grade { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .grade .largo { grid-column: 1 / -1; }
 

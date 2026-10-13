@@ -23,7 +23,7 @@ const PASTA_DADOS_PROJETO = path.join(PASTA_SRC, '..', 'dados');
 const ARQUIVOS_DADOS = ['versiculos.json', 'bloqueadas.txt'];
 const ICONE = path.join(PASTA_SRC, '..', 'icone.ico');
 const MAX_REGISTROS = 50;
-const AJUSTES = ['esperaMin', 'tempoComentarioS', 'tempoPresenteS', 'metaCurtidas'];
+const AJUSTES = ['esperaMin', 'tempoComentarioS', 'tempoPresenteS', 'metaCurtidas', 'musica', 'volumeMusica'];
 const TESTES = ['comentario', 'presente', 'seguidor', 'curtidas'];
 
 // Modo de verificação sem tela: `npx electron . --autoteste [--arroba=nome]`.
@@ -224,6 +224,10 @@ function criarControle() {
   controle.loadFile(path.join(PASTA_SRC, 'controle', 'index.html'));
 }
 
+function enviarMusica() {
+  enviar(tela, 'vl:aoMusica', { ligada: config.musica, volume: config.volumeMusica });
+}
+
 function abrirTela() {
   if (tela && !tela.isDestroyed()) {
     tela.show();
@@ -237,7 +241,8 @@ function abrirTela() {
     icon: ICONE,
     backgroundColor: '#0b1026',
     autoHideMenuBar: true,
-    webPreferences: { ...webPreferences, backgroundThrottling: false }, // animações seguem com a janela atrás
+    // animações e música seguem com a janela atrás; música toca sem clique na tela
+    webPreferences: { ...webPreferences, backgroundThrottling: false, autoplayPolicy: 'no-user-gesture-required' },
   });
   tela.setAspectRatio(9 / 16);
   travarNavegacao(tela);
@@ -246,6 +251,7 @@ function abrirTela() {
     // barra de curtidas sempre visível, mesmo antes da primeira curtida
     enviar(tela, 'vl:aoMostrar', ultimasCurtidas ?? { canal: 'curtidas', total: 0, meta: config.metaCurtidas, passo: config.metaCurtidas });
     if (ultimosAgradecidos) enviar(tela, 'vl:aoMostrar', ultimosAgradecidos);
+    enviarMusica();
   });
   tela.on('closed', () => {
     tela = null;
@@ -294,6 +300,7 @@ function registrarIpc() {
     }
     config = await salvarConfig(caminhoConfig, permitidas);
     seguro('Erro ao atualizar a config do diretor', () => diretor.atualizarConfig(config));
+    enviarMusica();
     return config;
   });
   responder('vl:testar', (tipo) => {
@@ -389,8 +396,19 @@ function autoteste() {
     [arrobaLongo + 4300, '08-foto-falhou'],
     [arrobaLongo + 5800, '09-arroba-longo-presente'],
     [arrobaLongo + 7000, '10-arroba-longo-faixa'],
+    [arrobaLongo + 12300, '11-convite'],
   ];
-  const fim = arrobaLongo + 7600;
+  // convite (o real vem a cada 2 min) e música ambiente ligada, conferida pelo log
+  passos.push(
+    [arrobaLongo + 11500, () => enviar(tela, 'vl:aoMostrar', { canal: 'cartao', tipo: 'convite', duracaoMs: 8000 })],
+    [arrobaLongo + 11500, () => enviar(tela, 'vl:aoMusica', { ligada: true, volume: 30 })],
+    [arrobaLongo + 13500, async () => {
+      const musica = await tela.webContents.executeJavaScript('window.musicaAmbiente?.estado()');
+      log.info(`autoteste: musica ${JSON.stringify(musica)}`);
+      enviar(tela, 'vl:aoMusica', { ligada: config.musica, volume: config.volumeMusica });
+    }],
+  );
+  const fim = arrobaLongo + 14500;
   // fim de live simulado (a conexão real emite isto e para de tentar): o botão deve voltar a Conectar
   passos.push([9000, async () => {
     await desconectar();

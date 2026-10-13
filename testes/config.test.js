@@ -14,6 +14,7 @@ test('padrões', () => {
   assert.deepEqual({ ...PADRAO }, {
     esperaMin: 5, tempoComentarioS: 8, tempoPresenteS: 12,
     tempoSeguidorS: 5, tempoMetaS: 10, metaCurtidas: 1000, arroba: '',
+    musica: false, volumeMusica: 30,
   });
   assert.ok(Object.isFrozen(PADRAO));
 });
@@ -36,7 +37,7 @@ test('normalizar: fora dos limites ou tipo errado volta ao padrão', () => {
 
 test('normalizar: limites inclusivos e valores válidos mantidos', () => {
   const c = normalizarConfig({ esperaMin: 0, tempoComentarioS: 2, tempoPresenteS: 60, tempoSeguidorS: 2.5, tempoMetaS: 60, metaCurtidas: 10, arroba: 'fulano' });
-  assert.deepEqual({ ...c }, { esperaMin: 0, tempoComentarioS: 2, tempoPresenteS: 60, tempoSeguidorS: 2.5, tempoMetaS: 60, metaCurtidas: 10, arroba: 'fulano' });
+  assert.deepEqual({ ...c }, { esperaMin: 0, tempoComentarioS: 2, tempoPresenteS: 60, tempoSeguidorS: 2.5, tempoMetaS: 60, metaCurtidas: 10, arroba: 'fulano', musica: false, volumeMusica: 30 });
   assert.equal(normalizarConfig({ esperaMin: 60 }).esperaMin, 60);
   assert.equal(normalizarConfig({ metaCurtidas: 1000000 }).metaCurtidas, 1000000);
 });
@@ -72,4 +73,14 @@ test('salvarConfig grava, mescla e relê', async () => {
     assert.deepEqual(await lerConfig(arq), r2);
     assert.match(await fs.readFile(arq, 'utf8'), /\n  "esperaMin"/);
   });
+});
+
+test('normalizar: música liga/desliga e volume 0–100', () => {
+  assert.equal(normalizarConfig({ musica: true }).musica, true);
+  assert.equal(normalizarConfig({ musica: 'sim' }).musica, false);
+  assert.equal(normalizarConfig({ volumeMusica: 0 }).volumeMusica, 0);
+  assert.equal(normalizarConfig({ volumeMusica: 100 }).volumeMusica, 100);
+  assert.equal(normalizarConfig({ volumeMusica: 101 }).volumeMusica, 30);
+  assert.equal(normalizarConfig({ volumeMusica: -1 }).volumeMusica, 30);
+  assert.equal(normalizarConfig({ volumeMusica: '50' }).volumeMusica, 30);
 });

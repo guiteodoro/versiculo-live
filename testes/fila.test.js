@@ -110,3 +110,14 @@ test('descartar pelo limite não libera a espera de quem foi descartado', () => 
   relogio.t = 10;
   assert.equal(fila.adicionarComentario(c('a')), false);
 });
+
+test('temPresente indica presente na fila', () => {
+  const fila = criarFila({ esperaMs: 0, agora: () => 0 });
+  assert.equal(fila.temPresente(), false);
+  fila.adicionarComentario({ tipo: 'comentario', usuario: { id: 'a', arroba: 'a' }, texto: 'oi' });
+  assert.equal(fila.temPresente(), false);
+  fila.adicionarPresente({ tipo: 'presente', usuario: { id: 'b', arroba: 'b' }, presente: {} });
+  assert.equal(fila.temPresente(), true);
+  fila.proximo();
+  assert.equal(fila.temPresente(), false);
+});

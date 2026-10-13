@@ -149,6 +149,16 @@ body {
 
 .com-faixa #palco .cartao { opacity: .55; }
 
+/* ---- convite a cada 2 minutos ---- */
+.cartao.convite {
+  text-align: center;
+  border-color: rgba(140, 175, 255, .55);
+  box-shadow: 0 0 5vh rgba(120, 160, 255, .35);
+}
+.convite-titulo { font-size: 3.9vh; font-weight: 700; margin-bottom: 2vh; }
+.convite-texto { font-family: Georgia, "Times New Roman", serif; line-height: 1.4; margin: 0 0 2vh; }
+.convite-rodape { font-size: 2.3vh; opacity: .75; font-style: italic; }
+
 .usuario {
   display: flex;
   align-items: center;

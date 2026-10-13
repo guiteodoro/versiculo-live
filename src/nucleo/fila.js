@@ -22,6 +22,10 @@ export function criarFila({ esperaMs, maxComentarios = 20, agora = Date.now }) {
     presentes.push(evento);
   }
 
+  function temPresente() {
+    return presentes.length > 0;
+  }
+
   function proximo() {
     if (presentes.length > 0) return presentes.shift();
     if (comentarios.length > 0) return comentarios.shift();
@@ -46,5 +50,5 @@ export function criarFila({ esperaMs, maxComentarios = 20, agora = Date.now }) {
     return presentes.length + comentarios.length;
   }
 
-  return { adicionarComentario, adicionarPresente, proximo, devolverComentario, aSeguir, definirEspera, tamanho };
+  return { adicionarComentario, adicionarPresente, temPresente, proximo, devolverComentario, aSeguir, definirEspera, tamanho };
 }

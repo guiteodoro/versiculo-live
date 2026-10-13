@@ -257,7 +257,17 @@
     let p;
     let baseVh;
 
-    if (msg.tipo === 'meta') {
+    if (msg.tipo === 'convite') {
+      caixa = el('div', 'cartao convite');
+      p = el('p', 'convite-texto', 'Escreva nos comentários como você está: ansiedade, família, cura, gratidão…');
+      baseVh = 3.4;
+      caixa.append(
+        el('div', 'convite-titulo', '🙏 Quer receber um versículo?'),
+        p,
+        el('div', 'convite-rodape', 'Cada pessoa recebe uma palavra'),
+      );
+      unidade.append(caixa);
+    } else if (msg.tipo === 'meta') {
       unidade.classList.add('meta');
       caixa = el('div', 'cheia');
       p = verso(msg.versiculo);
@@ -408,6 +418,12 @@
     } catch (e) {
       console.error('Erro ao mostrar na tela:', e);
     }
+  }
+
+  if (window.vl?.aoMusica) {
+    window.vl.aoMusica((opcoes) => {
+      try { window.musicaAmbiente?.definir(opcoes); } catch (e) { console.error('Erro na música:', e); }
+    });
   }
 
   if (window.vl?.aoMostrar) window.vl.aoMostrar(receber);

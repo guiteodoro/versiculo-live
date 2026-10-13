@@ -7,6 +7,7 @@ import { cortar } from './texto.js';
 
 const MAX_FAIXAS_PENDENTES = 3;
 const MAX_AGRADECIDOS = 5;
+const INTERVALO_CONVITE_MS = 2 * 60 * 1000;
 const ANONIMO = { arroba: 'anônimo', nome: 'anônimo', foto: null };
 
 export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date.now }) {
@@ -17,6 +18,8 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
   let metaPendente = null; // valor da meta batida que ainda não apareceu
   let atual = null; // { tipo, item, timer }
   let faixaTimer = null;
+  let conviteTimer = null;
+  let convitePendente = false;
   let faixasPendentes = [];
   const seguidoresVistos = new Set();
   let agradecidos = []; // mural: quem teve o cartão dourado, mais recente primeiro
@@ -61,6 +64,17 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     mostrar({ canal: 'agradecidos', arrobas: [...agradecidos] });
   }
 
+  // ---- convite "como receber um versículo", a cada 2 minutos ----
+
+  function agendarConvite() {
+    clearTimeout(conviteTimer);
+    conviteTimer = setTimeout(() => {
+      conviteTimer = null;
+      convitePendente = true;
+      mostrarProximo();
+    }, INTERVALO_CONVITE_MS);
+  }
+
   // ---- cartão central ----
 
   function exibir(tipo, item, duracaoMs, mensagem) {
@@ -85,6 +99,15 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
       const versiculo = versiculos.doTema('comunidade');
       exibir('meta', null, ms(cfg.tempoMetaS), { versiculo, meta });
       registro(`❤ meta de ${meta} curtidas!`);
+      return;
+    }
+
+    // convite: depois da meta e dos presentes, antes dos comentários
+    if (convitePendente && !fila.temPresente()) {
+      convitePendente = false;
+      exibir('convite', null, ms(cfg.tempoComentarioS), {});
+      registro('📣 convite');
+      agendarConvite();
       return;
     }
 
@@ -201,8 +224,10 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
   function limparTimers() {
     if (atual) clearTimeout(atual.timer);
     if (faixaTimer) clearTimeout(faixaTimer);
+    clearTimeout(conviteTimer);
     atual = null;
     faixaTimer = null;
+    conviteTimer = null;
   }
 
   function atualizarConfig(novaConfig) {
@@ -217,6 +242,8 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     novoEstado();
     seguidoresVistos.clear();
     metaPendente = null;
+    convitePendente = false;
+    agendarConvite();
     faixasPendentes = [];
     agradecidos = [];
     avisarCurtidas();
@@ -228,6 +255,8 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     limparTimers();
     parado = true;
   }
+
+  agendarConvite();
 
   return { receber, atualizarConfig, reiniciar, parar };
 }

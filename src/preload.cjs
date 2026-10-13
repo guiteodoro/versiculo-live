@@ -29,4 +29,5 @@ contextBridge.exposeInMainWorld('vl', {
   aoAviso: ouvir('vl:aoAviso'),
   // tela
   aoMostrar: ouvir('vl:aoMostrar'),
+  aoMusica: ouvir('vl:aoMusica'),
 });
