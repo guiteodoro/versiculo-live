@@ -2,7 +2,7 @@
 // Processo principal: janelas, IPC e a ligação entre as peças do núcleo.
 //   conexão / simulador → presentes brutos em combos → diretor; demais eventos direto no diretor.
 //   diretor.mostrar → cartao/faixa/curtidas para a tela; registro/fila para o controle.
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, screen, shell } from 'electron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -234,17 +234,31 @@ function abrirTela() {
     tela.focus();
     return;
   }
+  // Sem moldura: a área capturada pelo LIVE Studio é exatamente 9:16.
+  // Altura: 540×960 se couber; senão 92% da área útil do monitor.
+  const area = screen.getPrimaryDisplay().workAreaSize;
+  const altura = Math.min(960, Math.round(area.height * 0.92));
+  const largura = Math.round((altura * 9) / 16);
   tela = new BrowserWindow({
-    width: 540,
-    height: 960,
+    width: largura,
+    height: altura,
+    useContentSize: true,
+    frame: false,
     title: 'Versículo Live — Tela',
     icon: ICONE,
-    backgroundColor: '#0b1026',
-    autoHideMenuBar: true,
+    backgroundColor: '#3b0764',
     // animações e música seguem com a janela atrás; música toca sem clique na tela
     webPreferences: { ...webPreferences, backgroundThrottling: false, autoplayPolicy: 'no-user-gesture-required' },
   });
-  tela.setAspectRatio(9 / 16);
+  // setAspectRatio erra com escala de tela 150% (dava 338×619); acerta a largura pela altura.
+  const travar9x16 = () => {
+    if (!tela || tela.isDestroyed()) return;
+    const [, h] = tela.getContentSize();
+    const w = Math.round((h * 9) / 16);
+    if (tela.getContentSize()[0] !== w) tela.setContentSize(w, h);
+  };
+  tela.setContentSize(largura, altura);
+  tela.on('resized', travar9x16);
   travarNavegacao(tela);
   tela.on('page-title-updated', (e) => e.preventDefault());
   tela.webContents.on('did-finish-load', () => {
@@ -397,18 +411,23 @@ function autoteste() {
     [arrobaLongo + 5800, '09-arroba-longo-presente'],
     [arrobaLongo + 7000, '10-arroba-longo-faixa'],
     [arrobaLongo + 12300, '11-convite'],
+    [arrobaLongo + 21000, '12-espera'],
   ];
   // convite (o real vem a cada 2 min) e música ambiente ligada, conferida pelo log
   passos.push(
     [arrobaLongo + 11500, () => enviar(tela, 'vl:aoMostrar', { canal: 'cartao', tipo: 'convite', duracaoMs: 8000 })],
     [arrobaLongo + 11500, () => enviar(tela, 'vl:aoMusica', { ligada: true, volume: 30 })],
+    [arrobaLongo + 20000, () => enviar(tela, 'vl:aoMostrar', {
+      canal: 'cartao', tipo: 'espera', duracaoMs: 20000,
+      versiculo: { ref: 'Salmos 23:1', texto: 'O SENHOR é o meu pastor; nada me faltará.', tema: 'geral' },
+    })],
     [arrobaLongo + 13500, async () => {
       const musica = await tela.webContents.executeJavaScript('window.musicaAmbiente?.estado()');
       log.info(`autoteste: musica ${JSON.stringify(musica)}`);
       enviar(tela, 'vl:aoMusica', { ligada: config.musica, volume: config.volumeMusica });
     }],
   );
-  const fim = arrobaLongo + 14500;
+  const fim = arrobaLongo + 22000;
   // fim de live simulado (a conexão real emite isto e para de tentar): o botão deve voltar a Conectar
   passos.push([9000, async () => {
     await desconectar();
@@ -433,9 +452,9 @@ function autoteste() {
     const visto = await tela.webContents.executeJavaScript(`(() => {
       const u = document.querySelector('#palco .unidade:not(.trocando):not(.saindo)');
       const q = (s) => (u && u.querySelector(s)) || null;
-      const caixa = q('.cartao, .cheia');
+      const caixa = q('.cartao, .cheia, .espera');
       return {
-        cartao: u ? u.className + ' > ' + caixa.className : null,
+        cartao: u && caixa ? u.className + ' > ' + caixa.className : null,
         selo: q('.selo')?.textContent ?? null,
         usuario: q('.arroba')?.textContent ?? null,
         arrobaCabe: q('.arroba') ? q('.arroba').scrollWidth <= q('.arroba').clientWidth : null,
@@ -468,6 +487,10 @@ function autoteste() {
     setTimeout(() => capturar(nome).catch((e) => log.erro('autoteste: captura', e)), ms);
   }
   tela?.webContents.on('console-message', (e) => log.info(`autoteste: tela console ${e.level}: ${e.message}`));
+  setTimeout(() => {
+    const d = screen.getPrimaryDisplay();
+    log.info(`autoteste: janela ${JSON.stringify({ area: d.workArea, escala: d.scaleFactor, janela: tela?.getBounds(), conteudo: tela?.getContentBounds() })}`);
+  }, 1000);
   for (const [ms, passo] of passos) setTimeout(() => seguro('autoteste', passo), ms);
   setTimeout(() => {
     log.info('autoteste: fim');

@@ -8,7 +8,7 @@
   const SAIDA_MS = 300;
   const TROCA_MS = 150;
   const DURACAO_PADRAO_MS = 8000;
-  const FONTE_MIN_PX = 14;
+  const FONTE_MIN_VH = 2; // mínimo do versículo, proporcional à janela
   const PASSO_FONTE_PX = 2;
   const ARROBA_MIN_PX = 11;
   const ARROBA_VH = 3.4;
@@ -20,7 +20,8 @@
   const preenchidoCurtidas = document.getElementById('curtidas-preenchido');
   const mural = document.getElementById('agradecidos');
   const nomesMural = document.getElementById('agradecidos-nomes');
-  const legenda = document.getElementById('legenda');
+  const legenda = document.getElementById('gancho-sub'); // frase que troca sob o gancho
+  const tituloGancho = document.querySelector('#gancho .titulo');
   const LEGENDA_MS = 8000;
   const LINHA_MIN_PX = 10;
 
@@ -60,6 +61,17 @@
     return linha;
   }
 
+  const NOMES_TEMA = {
+    ansiedade: 'ANSIEDADE', medo: 'CORAGEM', familia: 'FAMÍLIA', cura: 'CURA', tristeza: 'CONSOLO',
+    gratidao: 'GRATIDÃO', fe: 'FÉ', perdao: 'PERDÃO', provisao: 'PROVISÃO', forca: 'FORÇA',
+    paz: 'PAZ', salvacao: 'SALVAÇÃO', geral: 'PALAVRA', 'boas-vindas': 'BOAS-VINDAS', comunidade: 'COMUNIDADE',
+  };
+
+  function etiquetaTema(versiculo) {
+    const nome = NOMES_TEMA[versiculo?.tema];
+    return nome ? el('span', 'tema', nome) : null;
+  }
+
   function verso(versiculo) {
     return el('p', 'verso', `“${versiculo?.texto ?? ''}”`);
   }
@@ -77,10 +89,11 @@
 
   // Versículo longo: diminui a fonte em passos até a caixa parar de transbordar.
   function ajustarFonte(caixa, p, baseVh) {
-    let px = Math.max(FONTE_MIN_PX, Math.round((window.innerHeight * baseVh) / 100));
+    const minimo = Math.round((window.innerHeight * FONTE_MIN_VH) / 100);
+    let px = Math.max(minimo, Math.round((window.innerHeight * baseVh) / 100));
     p.style.fontSize = `${px}px`;
-    while (caixa.scrollHeight > caixa.clientHeight + 1 && px > FONTE_MIN_PX) {
-      px = Math.max(FONTE_MIN_PX, px - PASSO_FONTE_PX);
+    while (caixa.scrollHeight > caixa.clientHeight + 1 && px > minimo) {
+      px = Math.max(minimo, px - PASSO_FONTE_PX);
       p.style.fontSize = `${px}px`;
     }
   }
@@ -257,7 +270,18 @@
     let p;
     let baseVh;
 
-    if (msg.tipo === 'convite') {
+    if (msg.tipo === 'espera') {
+      caixa = el('div', 'espera');
+      p = verso(msg.versiculo);
+      baseVh = 3.9;
+      caixa.append(
+        el('div', 'rotulo-espera', 'PALAVRA DO MOMENTO'),
+        p,
+        referencia(msg.versiculo),
+        el('div', 'chamada', 'Comente e receba a sua 👇'),
+      );
+      unidade.append(caixa);
+    } else if (msg.tipo === 'convite') {
       caixa = el('div', 'cartao convite');
       p = el('p', 'convite-texto', 'Escreva nos comentários como você está: ansiedade, família, cura, gratidão…');
       baseVh = 3.4;
@@ -271,7 +295,7 @@
       unidade.classList.add('meta');
       caixa = el('div', 'cheia');
       p = verso(msg.versiculo);
-      baseVh = 4.5;
+      baseVh = 4.2;
       caixa.append(
         el('div', 'selo', `❤ META DE ${numero(msg.meta)} CURTIDAS!`),
         p,
@@ -283,9 +307,12 @@
       const presente = msg.tipo === 'presente';
       caixa = el('div', presente ? 'cartao presente' : 'cartao');
       p = verso(msg.versiculo);
-      baseVh = 3.65;
+      baseVh = 3.3;
       if (presente) {
         caixa.append(el('div', 'selo', textoSelo(msg.presente)));
+      } else {
+        const tema = etiquetaTema(msg.versiculo);
+        if (tema) caixa.append(tema);
       }
       caixa.append(linhaUsuario(msg.usuario), p, referencia(msg.versiculo));
       unidade.append(caixa);
@@ -332,7 +359,7 @@
       passoMeta = Number(msg.passo);
       if (fraseAtual === 3) {
         legenda.textContent = frasesLegenda()[3];
-        ajustarLinha(legenda);
+        ajustarLinha(legenda, 2.4);
       }
     }
     if (meta !== metaAnterior) {
@@ -341,7 +368,7 @@
     }
     const faixaMeta = meta - inicioBarra;
     const fracao = faixaMeta > 0 ? (total - inicioBarra) / faixaMeta : 0;
-    numerosCurtidas.textContent = `${numero(total)} / ${numero(meta)}`;
+    numerosCurtidas.textContent = `❤ ${numero(total)} / ${numero(meta)}`;
     preenchidoCurtidas.style.width = `${Math.max(0, Math.min(100, fracao * 100))}%`;
     barraCurtidas.classList.remove('oculto');
   }
@@ -349,8 +376,8 @@
   // ---- mural "Agradecemos": quem teve o cartão dourado, mais recente primeiro ----
 
   // Linha única (mural, legenda): diminui a fonte até caber, em vez de cortar.
-  function ajustarLinha(elemento) {
-    let px = Math.round((window.innerHeight * 2.3) / 100);
+  function ajustarLinha(elemento, baseVh = 2.3) {
+    let px = Math.round((window.innerHeight * baseVh) / 100);
     elemento.style.fontSize = `${px}px`;
     while (elemento.scrollWidth > elemento.clientWidth && px > LINHA_MIN_PX) {
       px -= 1;
@@ -365,7 +392,7 @@
     ajustarLinha(mural);
   }
 
-  // ---- legenda "como funciona": explica, não pede ----
+  // ---- frase sob o gancho "como funciona": explica, não pede ----
 
   let passoMeta = 1000;
   const frasesLegenda = () => [
@@ -382,13 +409,14 @@
       const frases = frasesLegenda();
       fraseAtual = (fraseAtual + 1) % frases.length;
       legenda.textContent = frases[fraseAtual];
-      ajustarLinha(legenda);
+      ajustarLinha(legenda, 2.4);
       legenda.classList.remove('trocando-texto');
     }, 600);
   }
   legenda.textContent = frasesLegenda()[0];
-  ajustarLinha(legenda);
+  ajustarLinha(legenda, 2.4);
   setInterval(trocarLegenda, LEGENDA_MS);
+  ajustarLinha(tituloGancho, 4.2);
 
   // ---- janela redimensionada: recalcula fontes e o canvas ----
 
@@ -401,7 +429,8 @@
       camadaCartao.atual()?.ajustar?.();
       camadaFaixa.atual()?.ajustar?.();
       ajustarLinha(mural);
-      ajustarLinha(legenda);
+      ajustarLinha(legenda, 2.4);
+      ajustarLinha(tituloGancho, 4.2);
     });
   });
 

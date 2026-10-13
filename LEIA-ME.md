@@ -22,10 +22,13 @@ powershell -ExecutionPolicy Bypass -File criar-atalho.ps1
 
 O app abre uma segunda janela chamada **Versículo Live — Tela**. No TikTok LIVE Studio, adicione uma fonte do tipo **Captura de janela** e escolha essa janela. Deixe-a aberta (pode ficar atrás de outras).
 
-Se fechar essa janela sem querer, clique em **Abrir tela da live** na janela de controle.
+A tela não tem barra de título, para a captura encaixar exatamente em 9:16: **arraste por qualquer ponto** para mover e puxe pelas bordas para mudar o tamanho (ela mantém o formato). Para fechar só a tela, clique nela e aperte **Alt+F4**; para reabrir, clique em **Abrir tela da live** na janela de controle.
+
+Tudo o que importa fica no meio da tela, fora das áreas que o TikTok cobre no celular (nome da live no topo, botões à direita e comentários embaixo).
 
 Além dos versículos, a tela mostra sozinha:
-- uma **legenda** no rodapé explicando como a live funciona (troca a cada 8 segundos);
+- o título **✨ UMA PALAVRA PRA VOCÊ ✨**, com uma frase embaixo explicando como a live funciona (troca a cada 8 segundos);
+- a **Palavra do momento** quando ninguém comentou, para a tela nunca ficar parada;
 - o mural **🙏 Agradecemos** com quem mandou presente;
 - a cada **2 minutos**, um cartão **"Quer receber um versículo?"** ensinando a comentar.
 

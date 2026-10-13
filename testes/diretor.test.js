@@ -27,7 +27,11 @@ function novo(t, config = {}) {
   });
   t.after(() => diretor.parar());
   const de = (canal) => msgs.filter((m) => m.canal === canal);
-  return { diretor, msgs, de, cartoes: () => de('cartao'), limpar: () => (msgs.length = 0) };
+  return {
+    diretor, msgs, de, limpar: () => (msgs.length = 0),
+    cartoes: () => de('cartao').filter((m) => m.tipo !== 'espera'),
+    esperas: () => de('cartao').filter((m) => m.tipo === 'espera'),
+  };
 }
 
 test('comentário vira cartão de 8 s com versículo do tema', (t) => {
@@ -372,4 +376,46 @@ test('convite: reiniciar recomeça a contagem', (t) => {
   assert.equal(convites(de).length, 0);
   t.mock.timers.tick(20000);
   assert.equal(convites(de).length, 1);
+});
+
+test('espera: tela vazia por 3 s mostra a palavra do momento (geral, 20 s)', (t) => {
+  const { esperas } = novo(t);
+  t.mock.timers.tick(2999);
+  assert.equal(esperas().length, 0);
+  t.mock.timers.tick(1);
+  assert.equal(esperas().length, 1);
+  assert.equal(esperas()[0].versiculo.tema, 'geral');
+  assert.equal(esperas()[0].duracaoMs, 20000);
+  t.mock.timers.tick(20000);
+  assert.equal(esperas().length, 2, 'troca a cada 20 s enquanto ninguém comenta');
+  assert.notEqual(esperas()[1].versiculo.ref, esperas()[0].versiculo.ref);
+});
+
+test('espera: comentário e presente entram na hora, e a espera volta 3 s depois do cartão', (t) => {
+  const { diretor, cartoes, esperas, de } = novo(t);
+  t.mock.timers.tick(3000);
+  assert.equal(esperas().length, 1);
+  diretor.receber(c('ana', 'oi'));
+  assert.equal(cartoes().length, 1, 'comentário não espera a palavra do momento acabar');
+  t.mock.timers.tick(8000); // um tick por cartão (timer criado no meio de um tick longo conta do fim dele)
+  t.mock.timers.tick(2999);
+  assert.equal(esperas().length, 1);
+  t.mock.timers.tick(1);
+  assert.equal(esperas().length, 2);
+  diretor.receber(p('bia'));
+  assert.equal(de('cartao').at(-1).tipo, 'presente');
+});
+
+test('espera: não entra na fila nem no registro, e reiniciar recomeça', (t) => {
+  const { diretor, esperas, de } = novo(t);
+  t.mock.timers.tick(3000);
+  assert.equal(de('registro').length, 0);
+  assert.equal(de('fila').length, 0);
+  t.mock.timers.tick(1000);
+  diretor.reiniciar();
+  const n = esperas().length;
+  t.mock.timers.tick(2999);
+  assert.equal(esperas().length, n);
+  t.mock.timers.tick(1);
+  assert.equal(esperas().length, n + 1);
 });

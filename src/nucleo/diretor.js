@@ -8,6 +8,8 @@ import { cortar } from './texto.js';
 const MAX_FAIXAS_PENDENTES = 3;
 const MAX_AGRADECIDOS = 5;
 const INTERVALO_CONVITE_MS = 2 * 60 * 1000;
+const ESPERA_ANTES_MS = 3000; // tela vazia por 3 s → palavra do momento
+const ESPERA_DURACAO_MS = 20000;
 const ANONIMO = { arroba: 'anônimo', nome: 'anônimo', foto: null };
 
 export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date.now }) {
@@ -19,6 +21,7 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
   let atual = null; // { tipo, item, timer }
   let faixaTimer = null;
   let conviteTimer = null;
+  let esperaTimer = null;
   let convitePendente = false;
   let faixasPendentes = [];
   const seguidoresVistos = new Set();
@@ -75,23 +78,54 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     }, INTERVALO_CONVITE_MS);
   }
 
+  // ---- tela de espera: "palavra do momento" quando não há cartão ----
+
+  function mostrarEspera() {
+    exibir('espera', null, ESPERA_DURACAO_MS, { versiculo: versiculos.doTema('geral') });
+  }
+
+  function agendarEspera() {
+    clearTimeout(esperaTimer);
+    esperaTimer = setTimeout(() => {
+      esperaTimer = null;
+      if (!parado && !atual) mostrarEspera();
+    }, ESPERA_ANTES_MS);
+  }
+
+  function temAlgoParaMostrar() {
+    return metaPendente !== null || convitePendente || fila.tamanho() > 0;
+  }
+
   // ---- cartão central ----
 
   function exibir(tipo, item, duracaoMs, mensagem) {
+    clearTimeout(esperaTimer);
+    esperaTimer = null;
     atual = {
       tipo,
       item,
       timer: setTimeout(() => {
         atual = null;
-        mostrarProximo();
+        mostrarProximo({ depoisDe: tipo });
       }, duracaoMs),
     };
     mostrar({ canal: 'cartao', tipo, ...mensagem, duracaoMs });
   }
 
   // `pularMeta`: presente que interrompe comentário entra já; a meta vem logo depois dele.
-  function mostrarProximo({ pularMeta = false } = {}) {
-    if (parado || atual) return;
+  function mostrarProximo({ pularMeta = false, depoisDe = null } = {}) {
+    if (parado) return;
+    if (atual) {
+      // a palavra do momento sai na hora para qualquer cartão de verdade
+      if (atual.tipo !== 'espera' || !temAlgoParaMostrar()) return;
+      clearTimeout(atual.timer);
+      atual = null;
+    }
+    if (!temAlgoParaMostrar()) {
+      if (depoisDe === 'espera') mostrarEspera();
+      else agendarEspera();
+      return;
+    }
 
     if (metaPendente !== null && !pularMeta) {
       const meta = metaPendente;
@@ -225,9 +259,11 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     if (atual) clearTimeout(atual.timer);
     if (faixaTimer) clearTimeout(faixaTimer);
     clearTimeout(conviteTimer);
+    clearTimeout(esperaTimer);
     atual = null;
     faixaTimer = null;
     conviteTimer = null;
+    esperaTimer = null;
   }
 
   function atualizarConfig(novaConfig) {
@@ -244,6 +280,7 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     metaPendente = null;
     convitePendente = false;
     agendarConvite();
+    agendarEspera();
     faixasPendentes = [];
     agradecidos = [];
     avisarCurtidas();
@@ -257,6 +294,7 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
   }
 
   agendarConvite();
+  agendarEspera();
 
   return { receber, atualizarConfig, reiniciar, parar };
 }
