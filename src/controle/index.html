@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:">
+  <title>Versículo Live</title>
+  <link rel="stylesheet" href="controle.css">
+  <script src="controle.js" defer></script>
+</head>
+<body>
+  <header>
+    <form id="form-conexao" class="linha">
+      <input id="arroba" type="text" placeholder="@ do TikTok (ex.: @nome ou link do perfil)" autocomplete="off" spellcheck="false">
+      <button id="botao-conectar" type="submit" class="principal">Conectar</button>
+    </form>
+    <p id="status" class="status"><span id="bolinha" class="bolinha cinza">●</span> <span id="texto-status">Desconectado</span></p>
+    <p id="aviso" class="aviso" hidden></p>
+  </header>
+
+  <main>
+    <section class="coluna">
+      <h2>Ajustes</h2>
+      <label>Espera por pessoa (min) <input id="esperaMin" type="number" min="0" max="60" step="1"></label>
+      <label>Tempo do comentário (s) <input id="tempoComentarioS" type="number" min="2" max="60" step="1"></label>
+      <label>Tempo do presente (s) <input id="tempoPresenteS" type="number" min="2" max="60" step="1"></label>
+      <label>Meta de curtidas <input id="metaCurtidas" type="number" min="10" max="1000000" step="10"></label>
+
+      <h2>Música ambiente</h2>
+      <div class="musica">
+        <button type="button" id="musica-botao" aria-pressed="false">Ligar música</button>
+        <input id="musica-volume" type="range" min="0" max="100" step="5" aria-label="Volume da música">
+        <span id="musica-valor" class="musica-valor"></span>
+      </div>
+
+      <h2>Testes</h2>
+      <div class="grade">
+        <button type="button" data-teste="comentario">Testar comentário</button>
+        <button type="button" data-teste="presente">Testar presente</button>
+        <button type="button" data-teste="seguidor">Testar seguidor</button>
+        <button type="button" data-teste="curtidas">+500 curtidas</button>
+      </div>
+
+      <h2>Pastas e tela</h2>
+      <div class="grade">
+        <button type="button" id="abrir-dados">Abrir pasta de dados</button>
+        <button type="button" id="abrir-logs">Abrir logs</button>
+        <button type="button" id="abrir-tela" class="largo">Abrir tela da live</button>
+      </div>
+    </section>
+
+    <section class="coluna eventos">
+      <h2>Últimos eventos</h2>
+      <ul id="lista-eventos"></ul>
+    </section>
+  </main>
+</body>
+</html>

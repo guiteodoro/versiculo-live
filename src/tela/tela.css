@@ -1,0 +1,392 @@
+/* src/tela/tela.css
+   Janela 9:16 da live, estilo Pôr do sol vibrante.
+   Zona livre: no celular do espectador o TikTok cobre o topo (~11%), a direita
+   (~15%, botões) e a parte de baixo (~33%, comentários). Tudo que importa fica
+   entre 12% e 67% da altura, de 6% a 83% da largura. Medidas em vh (proporção travada). */
+
+:root {
+  --fundo: linear-gradient(180deg, #3b0764 0%, #9d174d 45%, #f97316 85%);
+  --ouro: #fbbf24;
+  --ouro-claro: #fde68a;
+  --rosa: #f472b6;
+  --roxo: #3b0764;
+  --esq: 6%;
+  --dir: 17%;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+  background: #3b0764 var(--fundo);
+  color: #fff;
+  font-family: system-ui, "Segoe UI", sans-serif;
+  user-select: none;
+  cursor: default;
+  -webkit-app-region: drag; /* janela sem moldura: arrasta por qualquer ponto */
+}
+
+/* ---- raios de luz girando devagar ---- */
+
+@keyframes girar { to { transform: rotate(360deg); } }
+
+#raios {
+  position: absolute;
+  left: 50%;
+  top: -60vh;
+  width: 200vh;
+  height: 200vh;
+  margin-left: -100vh;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, .07) 0 6deg, transparent 6deg 18deg);
+  animation: girar 90s linear infinite;
+  pointer-events: none;
+}
+
+/* ---- gancho fixo no topo da zona livre ---- */
+
+@keyframes brilho { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+#gancho {
+  position: absolute;
+  left: var(--esq);
+  right: var(--dir);
+  top: 12vh;
+  z-index: 1;
+  text-align: center;
+}
+#gancho .titulo {
+  font-size: 4.2vh; /* o JS diminui até caber numa linha */
+  white-space: nowrap;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: .02em;
+  background: linear-gradient(90deg, #fff 35%, #fde047 50%, #fff 65%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: brilho 3s linear infinite;
+  filter: drop-shadow(0 0 1.2vh rgba(253, 224, 71, .55));
+}
+#gancho-sub {
+  margin-top: .8vh;
+  font-size: 2.4vh;
+  font-weight: 700;
+  color: var(--ouro-claro);
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity .6s ease;
+}
+#gancho-sub.trocando-texto { opacity: 0; }
+
+/* ---- rodapé da zona livre: curtidas e mural ---- */
+
+#curtidas {
+  position: absolute;
+  left: var(--esq);
+  right: var(--dir);
+  top: 60.8vh;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.4vh;
+  font-size: 2.2vh;
+  font-weight: 700;
+  transition: opacity .4s ease;
+}
+#curtidas.oculto { opacity: 0; }
+#curtidas-numeros { white-space: nowrap; }
+
+.barra {
+  flex: 1;
+  height: 1.4vh;
+  border-radius: 1vh;
+  background: rgba(255, 255, 255, .22);
+  overflow: hidden;
+}
+.barra i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--rosa), #fde047);
+  transition: width .6s ease;
+}
+
+#agradecidos {
+  position: absolute;
+  left: var(--esq);
+  right: var(--dir);
+  top: 63.8vh;
+  z-index: 1;
+  font-size: 2.2vh;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity .4s ease;
+}
+#agradecidos.oculto { opacity: 0; }
+#agradecidos .titulo { color: var(--ouro-claro); font-weight: 800; }
+
+/* ---- camadas ---- */
+
+#palco { position: absolute; inset: 0; z-index: 2; }
+
+#luz {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#faixas {
+  position: absolute;
+  left: var(--esq);
+  right: var(--dir);
+  top: 20vh;
+  z-index: 4;
+}
+
+/* ---- entrada e saída ---- */
+
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes esmaecer { from { opacity: 1; } to { opacity: 0; } }
+@keyframes subir { from { transform: translateY(3vh); } to { transform: none; } }
+
+.unidade { animation: aparecer .4s ease-out both; }
+.faixa { animation: aparecer .4s ease-out both, subir .4s ease-out both; }
+.saindo { animation: esmaecer .3s ease-in forwards; }
+.trocando { animation: esmaecer .15s ease-in forwards; }
+
+/* ---- cartão central: na zona entre o gancho (20vh) e o "a seguir" (58vh) ---- */
+
+.unidade {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  padding: 20vh var(--dir) 42vh var(--esq);
+}
+
+.cartao {
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 38vh;
+  overflow: hidden;
+  padding: 2vh;
+  background: rgba(0, 0, 0, .28);
+  border: .3vh solid var(--ouro);
+  border-radius: 3vh;
+  box-shadow: 0 0 4vh rgba(251, 191, 36, .45);
+  animation: subir .4s ease-out both;
+  transition: opacity .3s ease;
+}
+
+.com-faixa #palco .cartao { opacity: .5; }
+
+.tema {
+  display: inline-block;
+  margin-bottom: .8vh;
+  padding: .3vh 1.2vh;
+  border-radius: 2vh;
+  background: var(--ouro);
+  color: var(--roxo);
+  font-size: 1.8vh;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 1.6vh;
+  min-width: 0;
+  font-size: 3vh;
+  font-weight: 800;
+}
+/* @ longo (até 22 + "…"): o JS diminui a fonte até caber; nunca corta. */
+.usuario .arroba {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.usuario .arroba.quebra { /* último recurso, abaixo da fonte mínima: quebra a linha */
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.avatar {
+  flex: none;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 50%;
+  object-fit: cover;
+  background: linear-gradient(135deg, var(--ouro), #f97316);
+}
+.avatar.inicial {
+  display: grid;
+  place-items: center;
+  color: var(--roxo);
+  font-size: 3vh;
+  font-weight: 900;
+}
+
+.verso {
+  margin: 1.2vh 0 .6vh;
+  font-family: Georgia, serif;
+  font-size: 3.2vh;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.ref { font-size: 2.3vh; opacity: .85; }
+
+.selo {
+  margin-bottom: 1.2vh;
+  font-size: 2.5vh;
+  font-weight: 800;
+  color: var(--ouro-claro);
+}
+
+/* presente: dourado mais forte, brilho na entrada */
+@keyframes brilhar {
+  from { box-shadow: 0 0 14vh rgba(253, 224, 71, 1); }
+  to { box-shadow: 0 0 6vh rgba(251, 191, 36, .7); }
+}
+
+.cartao.presente {
+  background: linear-gradient(135deg, rgba(251, 191, 36, .35), rgba(249, 115, 22, .25));
+  border-width: .4vh;
+  box-shadow: 0 0 6vh rgba(251, 191, 36, .7);
+  animation: subir .4s ease-out both, brilhar 1.2s ease-out both;
+}
+.presente .avatar {
+  width: 8vh;
+  height: 8vh;
+  box-shadow: 0 0 2.4vh var(--ouro);
+}
+.presente .avatar.inicial { font-size: 4vh; }
+
+.a-seguir {
+  position: absolute;
+  left: var(--esq);
+  right: var(--dir);
+  top: 58.2vh;
+  font-size: 2.2vh;
+  opacity: .85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- convite a cada 2 minutos ---- */
+
+.cartao.convite {
+  text-align: center;
+  border-color: var(--rosa);
+  box-shadow: 0 0 5vh rgba(244, 114, 182, .55);
+}
+.convite-titulo { font-size: 3.6vh; font-weight: 900; margin-bottom: 1.4vh; }
+.convite-texto { font-family: Georgia, "Times New Roman", serif; line-height: 1.35; margin: 0 0 1.4vh; }
+.convite-rodape { font-size: 2.2vh; color: var(--ouro-claro); font-weight: 700; }
+
+/* ---- tela de espera: palavra do momento ---- */
+
+.espera {
+  text-align: center;
+  width: 100%;
+  max-height: 38vh;
+  overflow: hidden;
+  text-shadow: 0 .3vh 1.2vh rgba(0, 0, 0, .45);
+  animation: subir .6s ease-out both;
+}
+.espera .rotulo-espera {
+  font-size: 2vh;
+  font-weight: 900;
+  letter-spacing: .14em;
+  color: var(--ouro-claro);
+}
+.espera .verso { font-size: 3.9vh; }
+.espera .chamada { margin-top: 1.4vh; font-size: 2.6vh; font-weight: 900; }
+
+/* ---- meta em tela cheia ---- */
+
+.unidade.meta {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(253, 230, 138, .45), transparent 60%),
+    var(--fundo);
+  padding-bottom: 36vh;
+}
+
+.cheia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 50vh;
+  overflow: hidden;
+  text-align: center;
+  animation: subir .4s ease-out both;
+}
+.cheia .selo { font-size: 3.2vh; }
+.cheia .verso { font-size: 4.2vh; }
+.cheia .comunidade { margin-top: 2vh; font-size: 2.5vh; color: var(--ouro-claro); font-weight: 700; }
+
+@keyframes explodir {
+  0% { transform: scale(.05); opacity: 1; }
+  60% { opacity: .8; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+.explosao {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 120vh;
+  height: 120vh;
+  margin: -60vh 0 0 -60vh;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 245, 210, .95), rgba(253, 224, 71, .4) 30%, transparent 65%);
+  pointer-events: none;
+  animation: explodir 1.6s ease-out forwards;
+}
+
+/* ---- faixa de seguidor (sobre o cartão, na zona livre) ---- */
+
+.faixa {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  box-sizing: border-box;
+  max-height: 20vh;
+  overflow: hidden;
+  padding: 1.8vh;
+  font-size: 2.7vh;
+  background: rgba(59, 7, 100, .75);
+  border: .3vh solid var(--rosa);
+  border-radius: 2.4vh;
+  box-shadow: 0 0 4vh rgba(244, 114, 182, .5);
+}
+.faixa .chegou { overflow-wrap: anywhere; font-weight: 700; }
+.faixa .verso { margin: .6vh 0 0; font-size: 2.6vh; line-height: 1.3; opacity: .95; }
+
+/* ---- crédito da tradução (CC BY 4.0), logo abaixo do mural ---- */
+
+#credito {
+  position: absolute;
+  left: var(--esq);
+  top: 66.6vh;
+  z-index: 5;
+  font-size: 1.5vh;
+  line-height: 1;
+  letter-spacing: .12em;
+  opacity: .5;
+  pointer-events: none;
+}

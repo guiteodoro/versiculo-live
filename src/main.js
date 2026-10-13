@@ -1,0 +1,538 @@
+// src/main.js
+// Processo principal: janelas, IPC e a ligação entre as peças do núcleo.
+//   conexão / simulador → presentes brutos em combos → diretor; demais eventos direto no diretor.
+//   diretor.mostrar → cartao/faixa/curtidas para a tela; registro/fila para o controle.
+import { app, BrowserWindow, ipcMain, screen, shell } from 'electron';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { criarLog } from './logs.js';
+import { lerConfig, salvarConfig } from './nucleo/config.js';
+import { validarDados, criarVersiculos } from './nucleo/versiculos.js';
+import { EXEMPLO } from './nucleo/versiculos-exemplo.js';
+import { criarFiltro } from './nucleo/filtro.js';
+import { criarCombos } from './nucleo/combos.js';
+import { criarDiretor } from './nucleo/diretor.js';
+import { criarConexao } from './nucleo/conexao-tiktok.js';
+import { limparArroba } from './nucleo/adaptador.js';
+import { criarSimulador } from './nucleo/simulador.js';
+
+const PASTA_SRC = path.dirname(fileURLToPath(import.meta.url));
+const PASTA_DADOS_PROJETO = path.join(PASTA_SRC, '..', 'dados');
+const ARQUIVOS_DADOS = ['versiculos.json', 'bloqueadas.txt'];
+const ICONE = path.join(PASTA_SRC, '..', 'icone.ico');
+const MAX_REGISTROS = 50;
+const AJUSTES = ['esperaMin', 'tempoComentarioS', 'tempoPresenteS', 'metaCurtidas', 'musica', 'volumeMusica'];
+const TESTES = ['comentario', 'presente', 'seguidor', 'curtidas'];
+
+// Modo de verificação sem tela: `npx electron . --autoteste [--arroba=nome]`.
+const AUTOTESTE = process.argv.includes('--autoteste');
+const ARROBA_AUTOTESTE = process.argv.find((a) => a.startsWith('--arroba='))?.slice('--arroba='.length);
+
+const pastaUsuario = app.getPath('userData');
+const pastaDados = path.join(pastaUsuario, 'dados');
+const pastaLogs = path.join(pastaUsuario, 'logs');
+const caminhoConfig = path.join(pastaUsuario, 'config.json');
+
+const log = criarLog(pastaLogs);
+
+let controle = null;
+let tela = null;
+let config = null;
+let diretor = null;
+let combos = null;
+let conexao = null;
+let simulador = null;
+let ativo = false; // o usuário pediu para conectar e ainda não desconectou
+let estadoAtual = { estado: 'desligado', arroba: '', ativo: false };
+let tamanhoFila = 0;
+let avisoAtual = '';
+let ultimasCurtidas = null; // última barra de curtidas enviada à tela
+let ultimosAgradecidos = null; // último mural enviado à tela
+const registros = [];
+
+const p2 = (n) => String(n).padStart(2, '0');
+function horaAgora() {
+  const d = new Date();
+  return `${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`;
+}
+
+// Nada vindo de timer ou callback de evento pode derrubar o processo principal.
+function seguro(contexto, fn) {
+  try {
+    return fn();
+  } catch (e) {
+    log.erro(contexto, e);
+    return undefined;
+  }
+}
+
+function enviar(janela, canal, dado) {
+  if (janela && !janela.isDestroyed()) janela.webContents.send(canal, dado);
+}
+
+// ---- estado, registros e avisos para o controle ----
+
+function enviarEstado(estado) {
+  estadoAtual = { ...estado, ativo };
+  log.info(`estado: ${estado.estado}${estado.arroba ? ` @${estado.arroba}` : ''}` +
+    `${estado.espectadores != null ? ` · ${estado.espectadores} espectadores` : ''}` +
+    `${estado.mensagem ? ` · ${estado.mensagem}` : ''}` +
+    `${ativo ? ' [ativo]' : ''}`);
+  enviar(controle, 'vl:aoEstado', estadoAtual);
+}
+
+function aoEstadoConexao(estado) {
+  // @ inválido e live terminada não tentam de novo; desligado é fim.
+  if (['desligado', 'terminou'].includes(estado.estado) || (estado.estado === 'erro' && !estado.arroba)) ativo = false;
+  enviarEstado(estado);
+}
+
+function avisar(texto) {
+  avisoAtual = texto;
+  if (texto) log.info(`aviso: ${texto}`);
+  enviar(controle, 'vl:aoAviso', texto);
+}
+
+function mostrar(msg) {
+  switch (msg.canal) {
+    case 'cartao':
+    case 'faixa':
+    case 'curtidas':
+    case 'agradecidos':
+      if (msg.canal === 'curtidas') ultimasCurtidas = msg;
+      if (msg.canal === 'agradecidos') ultimosAgradecidos = msg;
+      enviar(tela, 'vl:aoMostrar', msg);
+      break;
+    case 'registro': {
+      const registro = { hora: horaAgora(), texto: msg.texto };
+      registros.push(registro);
+      if (registros.length > MAX_REGISTROS) registros.shift();
+      if (AUTOTESTE) log.info(`registro: ${msg.texto}`);
+      enviar(controle, 'vl:aoRegistro', registro);
+      break;
+    }
+    case 'fila':
+      tamanhoFila = msg.tamanho;
+      enviar(controle, 'vl:aoFila', tamanhoFila);
+      break;
+  }
+}
+
+// ---- dados do usuário ----
+
+async function prepararDados() {
+  await fs.mkdir(pastaDados, { recursive: true });
+  for (const nome of ARQUIVOS_DADOS) {
+    try {
+      await fs.copyFile(path.join(PASTA_DADOS_PROJETO, nome), path.join(pastaDados, nome), fs.constants.COPYFILE_EXCL);
+      log.info(`copiado ${nome} para ${pastaDados}`);
+    } catch (e) {
+      if (e.code !== 'EEXIST') log.erro(`Não consegui copiar ${nome} para a pasta de dados`, e);
+    }
+  }
+}
+
+async function carregarVersiculos() {
+  const caminho = path.join(pastaDados, 'versiculos.json');
+  let erro;
+  try {
+    const dados = JSON.parse(await fs.readFile(caminho, 'utf8'));
+    const validacao = validarDados(dados);
+    if (validacao.ok) {
+      avisar('');
+      return criarVersiculos(dados);
+    }
+    erro = validacao.erro;
+  } catch (e) {
+    log.erro('Falha ao ler versiculos.json', e);
+    erro = e.code === 'ENOENT'
+      ? 'O arquivo versiculos.json não foi encontrado na pasta de dados.'
+      : 'O arquivo versiculos.json não pôde ser lido (JSON inválido).';
+  }
+  avisar(`Problema em versiculos.json: ${erro} Usando os versículos de exemplo.`);
+  return criarVersiculos(EXEMPLO);
+}
+
+async function carregarFiltro() {
+  try {
+    return criarFiltro(await fs.readFile(path.join(pastaDados, 'bloqueadas.txt'), 'utf8'));
+  } catch (e) {
+    log.erro('Falha ao ler bloqueadas.txt; seguindo sem palavras bloqueadas', e);
+    return criarFiltro('');
+  }
+}
+
+// Monta (ou remonta, ao conectar) combos + diretor com os dados atuais da pasta.
+async function montarNucleo() {
+  const versiculos = await carregarVersiculos();
+  const filtro = await carregarFiltro();
+  seguro('Erro ao parar o diretor anterior', () => diretor?.parar());
+  seguro('Erro ao parar os combos anteriores', () => combos?.parar());
+  diretor = criarDiretor({ versiculos, filtro, config, mostrar });
+  combos = criarCombos({
+    emitir: (evento) => seguro('Erro no diretor ao receber presente', () => diretor.receber(evento)),
+  });
+}
+
+function rotear(evento) {
+  seguro(`Erro ao tratar evento ${evento?.tipo}`, () => {
+    if (evento.tipo === 'presente-bruto') combos.receber(evento);
+    else diretor.receber(evento);
+  });
+}
+
+// ---- janelas ----
+
+const webPreferences = {
+  preload: path.join(PASTA_SRC, 'preload.cjs'),
+  contextIsolation: true,
+  nodeIntegration: false,
+  sandbox: true,
+};
+
+function travarNavegacao(janela) {
+  janela.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  janela.webContents.on('will-navigate', (e) => e.preventDefault());
+}
+
+function criarControle() {
+  controle = new BrowserWindow({
+    width: 760,
+    height: 620,
+    minWidth: 600,
+    minHeight: 480,
+    title: 'Versículo Live',
+    icon: ICONE,
+    backgroundColor: '#14161c',
+    autoHideMenuBar: true,
+    webPreferences,
+  });
+  travarNavegacao(controle);
+  controle.webContents.on('did-finish-load', () => {
+    // a janela pode ter (re)carregado depois dos eventos: manda o que ela precisa
+    enviar(controle, 'vl:aoEstado', estadoAtual);
+    enviar(controle, 'vl:aoFila', tamanhoFila);
+    enviar(controle, 'vl:aoAviso', avisoAtual);
+    for (const registro of registros) enviar(controle, 'vl:aoRegistro', registro);
+  });
+  controle.on('closed', () => {
+    controle = null;
+    app.quit();
+  });
+  controle.loadFile(path.join(PASTA_SRC, 'controle', 'index.html'));
+}
+
+function enviarMusica() {
+  enviar(tela, 'vl:aoMusica', { ligada: config.musica, volume: config.volumeMusica });
+}
+
+function abrirTela() {
+  if (tela && !tela.isDestroyed()) {
+    tela.show();
+    tela.focus();
+    return;
+  }
+  // Sem moldura: a área capturada pelo LIVE Studio é exatamente 9:16.
+  // Altura: 540×960 se couber; senão 92% da área útil do monitor.
+  const area = screen.getPrimaryDisplay().workAreaSize;
+  const altura = Math.min(960, Math.round(area.height * 0.92));
+  const largura = Math.round((altura * 9) / 16);
+  tela = new BrowserWindow({
+    width: largura,
+    height: altura,
+    useContentSize: true,
+    frame: false,
+    title: 'Versículo Live — Tela',
+    icon: ICONE,
+    backgroundColor: '#3b0764',
+    // animações e música seguem com a janela atrás; música toca sem clique na tela
+    webPreferences: { ...webPreferences, backgroundThrottling: false, autoplayPolicy: 'no-user-gesture-required' },
+  });
+  // setAspectRatio erra com escala de tela 150% (dava 338×619); acerta a largura pela altura.
+  const travar9x16 = () => {
+    if (!tela || tela.isDestroyed()) return;
+    const [, h] = tela.getContentSize();
+    const w = Math.round((h * 9) / 16);
+    if (tela.getContentSize()[0] !== w) tela.setContentSize(w, h);
+  };
+  tela.setContentSize(largura, altura);
+  tela.on('resized', travar9x16);
+  travarNavegacao(tela);
+  tela.on('page-title-updated', (e) => e.preventDefault());
+  tela.webContents.on('did-finish-load', () => {
+    // barra de curtidas sempre visível, mesmo antes da primeira curtida
+    enviar(tela, 'vl:aoMostrar', ultimasCurtidas ?? { canal: 'curtidas', total: 0, meta: config.metaCurtidas, passo: config.metaCurtidas });
+    if (ultimosAgradecidos) enviar(tela, 'vl:aoMostrar', ultimosAgradecidos);
+    enviarMusica();
+  });
+  tela.on('closed', () => {
+    tela = null;
+  });
+  tela.loadFile(path.join(PASTA_SRC, 'tela', 'index.html'));
+}
+
+// ---- IPC ----
+
+function responder(canal, fn) {
+  ipcMain.handle(canal, async (_evento, ...args) => {
+    try {
+      return await fn(...args);
+    } catch (e) {
+      log.erro(`Erro ao atender ${canal}`, e);
+      return undefined;
+    }
+  });
+}
+
+async function conectar(bruto) {
+  const arroba = limparArroba(bruto);
+  if (arroba) {
+    config = await salvarConfig(caminhoConfig, { arroba });
+    await montarNucleo(); // relê versiculos.json e bloqueadas.txt
+    seguro('Erro ao reiniciar o diretor', () => diretor.reiniciar());
+    ativo = true;
+  }
+  conexao.conectar(bruto); // @ inválido: a conexão responde com a mensagem de erro
+  return arroba ? config : null;
+}
+
+async function desconectar() {
+  ativo = false;
+  await conexao.desconectar();
+}
+
+function registrarIpc() {
+  responder('vl:conectar', conectar);
+  responder('vl:desconectar', desconectar);
+  responder('vl:config.ler', () => config);
+  responder('vl:config.salvar', async (mudancas) => {
+    const permitidas = {};
+    for (const campo of AJUSTES) {
+      if (mudancas && campo in mudancas) permitidas[campo] = mudancas[campo];
+    }
+    config = await salvarConfig(caminhoConfig, permitidas);
+    seguro('Erro ao atualizar a config do diretor', () => diretor.atualizarConfig(config));
+    enviarMusica();
+    return config;
+  });
+  responder('vl:testar', (tipo) => {
+    if (!TESTES.includes(tipo)) return;
+    seguro(`Erro no teste ${tipo}`, () => (tipo === 'curtidas' ? simulador.curtidas(500) : simulador[tipo]()));
+  });
+  responder('vl:abrirPastaDados', () => abrirPasta(pastaDados));
+  responder('vl:abrirLogs', () => abrirPasta(pastaLogs));
+  responder('vl:abrirTela', abrirTela);
+}
+
+async function abrirPasta(pasta) {
+  const erro = await shell.openPath(pasta);
+  if (erro) log.erro(`Não consegui abrir a pasta ${pasta}: ${erro}`);
+}
+
+// ---- erros não tratados ----
+
+function erroNaoTratado(tipo, e) {
+  log.erro(`Erro não tratado (${tipo})`, e);
+  // Conectado e funcionando: não derruba um estado bom, só avisa.
+  if (estadoAtual.estado === 'no_ar') {
+    avisar('Aconteceu um erro inesperado. Os detalhes estão no log.');
+    return;
+  }
+  enviarEstado({
+    estado: 'erro',
+    arroba: estadoAtual.arroba,
+    mensagem: 'Aconteceu um erro inesperado. Os detalhes estão no log.',
+  });
+}
+
+process.on('uncaughtException', (e) => erroNaoTratado('uncaughtException', e));
+process.on('unhandledRejection', (e) => erroNaoTratado('unhandledRejection', e));
+
+// ---- autoteste ----
+
+function autoteste() {
+  log.info('autoteste: início');
+  const passos = [
+    [1000, () => simulador.comentario()],
+    [1500, () => simulador.presente()],
+    [3000, () => conectar('@@@')],
+  ];
+  if (ARROBA_AUTOTESTE) passos.push([5000, () => conectar(ARROBA_AUTOTESTE)]);
+  // tela: faixa, meta de curtidas, @ de 30 caracteres com foto que falha e versículo longo
+  passos.push(
+    [2000, () => simulador.seguidor()],
+    [4000, () => simulador.curtidas(500)],
+    [4500, () => simulador.curtidas(500)],
+    [5500, () => rotear({
+      tipo: 'comentario',
+      usuario: { id: 'autoteste-longo', arroba: 'abcdefghij'.repeat(3), nome: 'Teste Longo', foto: 'https://127.0.0.1:1/foto.jpg' },
+      texto: 'paz',
+    })],
+  );
+  // quando cada cartão do diretor entra, pelos tempos da config
+  const inicioMeta = 1500 + config.tempoPresenteS * 1000; // presente das 1,5 s termina → meta
+  const voltaComentario = inicioMeta + config.tempoMetaS * 1000; // comentário interrompido volta
+  const arrobaLongo = voltaComentario + config.tempoComentarioS * 1000; // comentário do @ de 30 caracteres
+  const cartaoTeste = (arroba, texto, foto) => () => enviar(tela, 'vl:aoMostrar', {
+    canal: 'cartao',
+    tipo: 'comentario',
+    usuario: { id: `autoteste-${arroba}`, arroba, nome: arroba, foto },
+    versiculo: { ref: 'Teste 1:1', texto, tema: 'geral' },
+    duracaoMs: 3000,
+    aSeguir: { arrobas: ['a', 'b'], resto: 0 },
+  });
+  passos.push(
+    [arrobaLongo + 1500, cartaoTeste('verso.longo', 'Versículo longo de teste. '.repeat(16), null)],
+    [arrobaLongo + 3300, cartaoTeste('foto.falhou', 'Versículo curto de teste.', 'https://127.0.0.1:1/foto.jpg')],
+    // @ de 30 caracteres (o diretor corta em 22 + "…") também no presente e na faixa
+    [arrobaLongo + 5000, () => rotear({
+      tipo: 'presente-bruto',
+      usuario: { id: 'autoteste-longo', arroba: 'abcdefghij'.repeat(3), nome: 'Teste Longo', foto: null },
+      presente: { nome: 'Rosa', quantidade: 5, diamantes: 1, imagem: null },
+      sequencia: false,
+      fim: true,
+    })],
+    [arrobaLongo + 6200, () => rotear({
+      tipo: 'seguiu',
+      usuario: { id: 'autoteste-longo-seguidor', arroba: 'klmnopqrst'.repeat(3), nome: 'Seguidor Longo', foto: null },
+    })],
+  );
+  const capturas = [
+    [1450, '01-comentario'],
+    [1900, '02-presente-interrompe'],
+    [2700, '03-faixa-seguidor'],
+    [inicioMeta + 1200, '04-meta'],
+    [voltaComentario + 800, '05-comentario-volta'],
+    [arrobaLongo + 800, '06-arroba-longo'],
+    [arrobaLongo + 2300, '07-versiculo-longo'],
+    [arrobaLongo + 4300, '08-foto-falhou'],
+    [arrobaLongo + 5800, '09-arroba-longo-presente'],
+    [arrobaLongo + 7000, '10-arroba-longo-faixa'],
+    [arrobaLongo + 12300, '11-convite'],
+    [arrobaLongo + 21000, '12-espera'],
+  ];
+  // convite (o real vem a cada 2 min) e música ambiente ligada, conferida pelo log
+  passos.push(
+    [arrobaLongo + 11500, () => enviar(tela, 'vl:aoMostrar', { canal: 'cartao', tipo: 'convite', duracaoMs: 8000 })],
+    [arrobaLongo + 11500, () => enviar(tela, 'vl:aoMusica', { ligada: true, volume: 30 })],
+    [arrobaLongo + 20000, () => enviar(tela, 'vl:aoMostrar', {
+      canal: 'cartao', tipo: 'espera', duracaoMs: 20000,
+      versiculo: { ref: 'Salmos 23:1', texto: 'O SENHOR é o meu pastor; nada me faltará.', tema: 'geral' },
+    })],
+    [arrobaLongo + 13500, async () => {
+      const musica = await tela.webContents.executeJavaScript('window.musicaAmbiente?.estado()');
+      log.info(`autoteste: musica ${JSON.stringify(musica)}`);
+      enviar(tela, 'vl:aoMusica', { ligada: config.musica, volume: config.volumeMusica });
+    }],
+  );
+  const fim = arrobaLongo + 22000;
+  // fim de live simulado (a conexão real emite isto e para de tentar): o botão deve voltar a Conectar
+  passos.push([9000, async () => {
+    await desconectar();
+    ativo = true;
+    aoEstadoConexao({ estado: 'terminou', arroba: ARROBA_AUTOTESTE ?? '', mensagem: 'A live terminou' });
+  }]);
+  // o que a janela de controle mostra, para conferir pelo log
+  const conferir = async () => {
+    if (!controle) return;
+    const visto = await controle.webContents.executeJavaScript(`({
+      status: document.getElementById('texto-status').textContent,
+      botao: document.getElementById('botao-conectar').textContent,
+      eventos: document.querySelectorAll('#lista-eventos li').length,
+    })`);
+    log.info(`autoteste: controle ${JSON.stringify(visto)}`);
+  };
+  for (const ms of [2500, 4000, 8000, 15000]) setTimeout(() => conferir().catch((e) => log.erro('autoteste', e)), ms);
+  controle?.webContents.on('console-message', (e) => log.info(`autoteste: console ${e.level}: ${e.message}`));
+  // o que a tela mostra, para conferir pelo log
+  const conferirTela = async () => {
+    if (!tela || tela.isDestroyed()) return;
+    const visto = await tela.webContents.executeJavaScript(`(() => {
+      const u = document.querySelector('#palco .unidade:not(.trocando):not(.saindo)');
+      const q = (s) => (u && u.querySelector(s)) || null;
+      const caixa = q('.cartao, .cheia, .espera');
+      return {
+        cartao: u && caixa ? u.className + ' > ' + caixa.className : null,
+        selo: q('.selo')?.textContent ?? null,
+        usuario: q('.arroba')?.textContent ?? null,
+        arrobaCabe: q('.arroba') ? q('.arroba').scrollWidth <= q('.arroba').clientWidth : null,
+        fonteArroba: q('.arroba')?.style.fontSize ?? null,
+        arrobaQuebra: q('.arroba')?.classList.contains('quebra') ?? null,
+        avatar: q('.avatar') ? q('.avatar').tagName + ' ' + q('.avatar').textContent : null,
+        fonteVerso: q('.verso')?.style.fontSize ?? null,
+        transborda: caixa ? caixa.scrollHeight > caixa.clientHeight + 1 : null,
+        aSeguir: q('.a-seguir')?.textContent ?? null,
+        faixa: document.querySelector('.faixa:not(.trocando):not(.saindo) .chegou')?.textContent ?? null,
+        curtidas: document.getElementById('curtidas-numeros').textContent,
+        barra: document.getElementById('curtidas-preenchido').style.width,
+        tamanho: innerWidth + 'x' + innerHeight,
+      };
+    })()`);
+    log.info(`autoteste: tela ${JSON.stringify(visto)}`);
+  };
+  // screenshots da tela para conferir o visual (pasta fora do git)
+  const pastaCapturas = path.join(PASTA_SRC, '..', '.superpowers', 'capturas');
+  const capturar = async (nome) => {
+    await conferirTela();
+    if (!tela || tela.isDestroyed()) return;
+    const imagem = await tela.webContents.capturePage();
+    await fs.mkdir(pastaCapturas, { recursive: true });
+    const arquivo = path.join(pastaCapturas, `${nome}.png`);
+    await fs.writeFile(arquivo, imagem.toPNG());
+    log.info(`autoteste: captura ${arquivo}`);
+  };
+  for (const [ms, nome] of capturas) {
+    setTimeout(() => capturar(nome).catch((e) => log.erro('autoteste: captura', e)), ms);
+  }
+  tela?.webContents.on('console-message', (e) => log.info(`autoteste: tela console ${e.level}: ${e.message}`));
+  setTimeout(() => {
+    const d = screen.getPrimaryDisplay();
+    log.info(`autoteste: janela ${JSON.stringify({ area: d.workArea, escala: d.scaleFactor, janela: tela?.getBounds(), conteudo: tela?.getContentBounds() })}`);
+  }, 1000);
+  for (const [ms, passo] of passos) setTimeout(() => seguro('autoteste', passo), ms);
+  setTimeout(() => {
+    log.info('autoteste: fim');
+    app.quit();
+  }, fim);
+}
+
+// ---- início ----
+
+async function iniciar() {
+  log.info(`Versículo Live iniciado (Electron ${process.versions.electron})`);
+  config = await lerConfig(caminhoConfig);
+  await prepararDados();
+  await montarNucleo();
+  conexao = criarConexao({
+    aoEvento: rotear,
+    aoEstado: (estado) => seguro('Erro ao repassar estado', () => aoEstadoConexao(estado)),
+    aoErro: (texto, erro) => log.erro(texto, erro),
+  });
+  simulador = criarSimulador({ aoEvento: rotear });
+  registrarIpc();
+  criarControle();
+  abrirTela();
+  if (AUTOTESTE) autoteste();
+}
+
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (!controle) return;
+    if (controle.isMinimized()) controle.restore();
+    controle.focus();
+  });
+  app.on('window-all-closed', () => app.quit());
+  app.on('before-quit', () => {
+    seguro('Erro ao parar o diretor', () => diretor?.parar());
+    seguro('Erro ao parar os combos', () => combos?.parar());
+    if (conexao) conexao.desconectar().catch((e) => log.erro('Erro ao desconectar', e));
+  });
+  app.whenReady().then(iniciar).catch((e) => {
+    log.erro('Falha ao iniciar o app', e);
+    app.quit();
+  });
+}

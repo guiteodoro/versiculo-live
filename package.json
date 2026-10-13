@@ -1,0 +1,17 @@
+{
+  "name": "versiculo-live",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test --disable-warning=ExperimentalWarning testes/"
+  },
+  "dependencies": {
+    "tiktok-live-connector": "2.5.0"
+  },
+  "devDependencies": {
+    "electron": "44.7.0"
+  }
+}
