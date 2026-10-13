@@ -1,6 +1,7 @@
 // src/tela/tela.js
 // Janela 9:16 capturada no TikTok LIVE Studio: desenha as mensagens do diretor
-// (cartao / faixa / curtidas). Nomes e textos vêm de desconhecidos: só textContent.
+// (cartao / faixa / curtidas / agradecidos) e a legenda "como funciona".
+// Nomes e textos vêm de desconhecidos: só textContent.
 'use strict';
 
 (() => {
@@ -17,6 +18,11 @@
   const barraCurtidas = document.getElementById('curtidas');
   const numerosCurtidas = document.getElementById('curtidas-numeros');
   const preenchidoCurtidas = document.getElementById('curtidas-preenchido');
+  const mural = document.getElementById('agradecidos');
+  const nomesMural = document.getElementById('agradecidos-nomes');
+  const legenda = document.getElementById('legenda');
+  const LEGENDA_MS = 8000;
+  const LINHA_MIN_PX = 10;
 
   const numero = (n) => (Number(n) || 0).toLocaleString('pt-BR');
 
@@ -312,6 +318,13 @@
   function mostrarCurtidas(msg) {
     const total = Number(msg.total) || 0;
     const meta = Number(msg.meta) || 0;
+    if (Number(msg.passo) > 0 && Number(msg.passo) !== passoMeta) {
+      passoMeta = Number(msg.passo);
+      if (fraseAtual === 3) {
+        legenda.textContent = frasesLegenda()[3];
+        ajustarLinha(legenda);
+      }
+    }
     if (meta !== metaAnterior) {
       inicioBarra = metaAnterior > 0 && total >= metaAnterior && metaAnterior < meta ? metaAnterior : 0;
       metaAnterior = meta;
@@ -323,6 +336,50 @@
     barraCurtidas.classList.remove('oculto');
   }
 
+  // ---- mural "Agradecemos": quem teve o cartão dourado, mais recente primeiro ----
+
+  // Linha única (mural, legenda): diminui a fonte até caber, em vez de cortar.
+  function ajustarLinha(elemento) {
+    let px = Math.round((window.innerHeight * 2.3) / 100);
+    elemento.style.fontSize = `${px}px`;
+    while (elemento.scrollWidth > elemento.clientWidth && px > LINHA_MIN_PX) {
+      px -= 1;
+      elemento.style.fontSize = `${px}px`;
+    }
+  }
+
+  function mostrarAgradecidos(msg) {
+    const arrobas = Array.isArray(msg.arrobas) ? msg.arrobas : [];
+    nomesMural.textContent = arrobas.map((a) => `@${a}`).join(' · ');
+    mural.classList.toggle('oculto', arrobas.length === 0);
+    ajustarLinha(mural);
+  }
+
+  // ---- legenda "como funciona": explica, não pede ----
+
+  let passoMeta = 1000;
+  const frasesLegenda = () => [
+    '💬 Cada comentário recebe um versículo',
+    '✍️ Escreva como você está: ansiedade, família, cura…',
+    '🎁 Presentes aparecem em destaque dourado',
+    `❤ A cada ${numero(passoMeta)} curtidas, um versículo para todos`,
+  ];
+  let fraseAtual = 0;
+
+  function trocarLegenda() {
+    legenda.classList.add('trocando-texto');
+    setTimeout(() => {
+      const frases = frasesLegenda();
+      fraseAtual = (fraseAtual + 1) % frases.length;
+      legenda.textContent = frases[fraseAtual];
+      ajustarLinha(legenda);
+      legenda.classList.remove('trocando-texto');
+    }, 600);
+  }
+  legenda.textContent = frasesLegenda()[0];
+  ajustarLinha(legenda);
+  setInterval(trocarLegenda, LEGENDA_MS);
+
   // ---- janela redimensionada: recalcula fontes e o canvas ----
 
   let ajusteAgendado = 0;
@@ -333,6 +390,8 @@
       luz.redimensionar();
       camadaCartao.atual()?.ajustar?.();
       camadaFaixa.atual()?.ajustar?.();
+      ajustarLinha(mural);
+      ajustarLinha(legenda);
     });
   });
 
@@ -344,6 +403,7 @@
         case 'cartao': return mostrarCartao(msg);
         case 'faixa': return mostrarFaixa(msg);
         case 'curtidas': return mostrarCurtidas(msg);
+        case 'agradecidos': return mostrarAgradecidos(msg);
       }
     } catch (e) {
       console.error('Erro ao mostrar na tela:', e);

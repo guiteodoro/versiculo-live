@@ -6,6 +6,7 @@ import { criarCurtidas } from './curtidas.js';
 import { cortar } from './texto.js';
 
 const MAX_FAIXAS_PENDENTES = 3;
+const MAX_AGRADECIDOS = 5;
 const ANONIMO = { arroba: 'anônimo', nome: 'anônimo', foto: null };
 
 export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date.now }) {
@@ -18,6 +19,7 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
   let faixaTimer = null;
   let faixasPendentes = [];
   const seguidoresVistos = new Set();
+  let agradecidos = []; // mural: quem teve o cartão dourado, mais recente primeiro
   let parado = false;
 
   const ms = (s) => s * 1000;
@@ -50,7 +52,13 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
 
   function avisarCurtidas() {
     const { total, meta } = curtidas.estado();
-    mostrar({ canal: 'curtidas', total, meta });
+    mostrar({ canal: 'curtidas', total, meta, passo: cfg.metaCurtidas });
+  }
+
+  function agradecer(usuario) {
+    if (usuario.arroba === ANONIMO.arroba) return;
+    agradecidos = [usuario.arroba, ...agradecidos.filter((a) => a !== usuario.arroba)].slice(0, MAX_AGRADECIDOS);
+    mostrar({ canal: 'agradecidos', arrobas: [...agradecidos] });
   }
 
   // ---- cartão central ----
@@ -93,6 +101,7 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
         presente: item.presente,
         aSeguir,
       });
+      agradecer(item.usuario);
       registro(`🎁 @${item.usuario.arroba} · ${item.presente.quantidade} ${item.presente.nome} → ${versiculo.ref}`);
       return;
     }
@@ -172,7 +181,7 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
   function receberCurtidas(evento) {
     const metaAntes = curtidas.estado().meta;
     const { total, meta, bateuMeta } = curtidas.somar(evento.quantidade);
-    mostrar({ canal: 'curtidas', total, meta });
+    mostrar({ canal: 'curtidas', total, meta, passo: cfg.metaCurtidas });
     if (bateuMeta) {
       metaPendente = metaAntes;
       mostrarProximo();
@@ -209,8 +218,10 @@ export function criarDiretor({ versiculos, filtro, config, mostrar, agora = Date
     seguidoresVistos.clear();
     metaPendente = null;
     faixasPendentes = [];
+    agradecidos = [];
     avisarCurtidas();
     mostrar({ canal: 'fila', tamanho: 0 });
+    mostrar({ canal: 'agradecidos', arrobas: [] });
   }
 
   function parar() {

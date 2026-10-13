@@ -64,6 +64,37 @@ body {
 
 #palco { position: absolute; inset: 0; z-index: 2; }
 
+/* ---- mural de agradecimento e legenda (abaixo do palco: a meta em tela cheia os cobre) ---- */
+
+#agradecidos {
+  position: absolute;
+  left: var(--margem);
+  right: var(--margem);
+  top: 11vh; /* abaixo da barra de curtidas */
+  z-index: 1;
+  font-size: 2.3vh;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: .85;
+  transition: opacity .4s ease;
+}
+#agradecidos.oculto { opacity: 0; }
+#agradecidos .titulo { color: var(--ouro); font-weight: 700; }
+
+#legenda {
+  position: absolute;
+  left: var(--margem);
+  right: calc(var(--margem) + 7vh); /* espaço do crédito BLIVRE */
+  bottom: var(--margem);
+  z-index: 1;
+  font-size: 2.3vh;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: .75;
+  transition: opacity .6s ease;
+}
+#legenda.trocando-texto { opacity: 0; }
+
 #luz {
   position: absolute;
   inset: 0;
@@ -77,7 +108,7 @@ body {
   position: absolute;
   left: var(--margem);
   right: var(--margem);
-  top: 11.2vh;
+  top: 15vh; /* abaixo do mural */
   z-index: 4;
 }
 
@@ -198,7 +229,7 @@ body {
   position: absolute;
   left: var(--margem);
   right: var(--margem);
-  bottom: var(--margem);
+  bottom: calc(var(--margem) + 3.6vh); /* acima da legenda */
   font-size: 2.5vh;
   opacity: .7;
   white-space: nowrap;

@@ -217,12 +217,12 @@ test('curtidas atualizam a barra', (t) => {
     { total: 80, meta: 100 },
   ]);
   diretor.receber(k(25));
-  assert.deepEqual(de('curtidas').at(-1), { canal: 'curtidas', total: 105, meta: 200 });
+  assert.deepEqual(de('curtidas').at(-1), { canal: 'curtidas', total: 105, meta: 200, passo: 100 });
   const meta = de('cartao').at(-1);
   assert.equal(meta.tipo, 'meta');
   assert.equal(meta.meta, 100);
   diretor.atualizarConfig({ ...PADRAO, metaCurtidas: 50 });
-  assert.deepEqual(de('curtidas').at(-1), { canal: 'curtidas', total: 105, meta: 150 });
+  assert.deepEqual(de('curtidas').at(-1), { canal: 'curtidas', total: 105, meta: 150, passo: 50 });
 });
 
 test('aSeguir acompanha o cartão', (t) => {
@@ -248,8 +248,9 @@ test('reiniciar zera fila, curtidas, seguidores vistos e o cartão atual', (t) =
   limpar();
   diretor.reiniciar();
   assert.deepEqual(msgs, [
-    { canal: 'curtidas', total: 0, meta: 1000 },
+    { canal: 'curtidas', total: 0, meta: 1000, passo: 1000 },
     { canal: 'fila', tamanho: 0 },
+    { canal: 'agradecidos', arrobas: [] },
   ]);
   for (let i = 0; i < 10; i++) t.mock.timers.tick(8000);
   assert.equal(cartoes().length, 0, 'bia não aparece mais');
@@ -258,7 +259,7 @@ test('reiniciar zera fila, curtidas, seguidores vistos e o cartão atual', (t) =
   diretor.receber(c('dani', 'oi'));
   assert.equal(cartoes().length, 1, 'cartão novo entra na hora');
   diretor.receber(k(10));
-  assert.deepEqual(de('curtidas').at(-1), { canal: 'curtidas', total: 10, meta: 1000 });
+  assert.deepEqual(de('curtidas').at(-1), { canal: 'curtidas', total: 10, meta: 1000, passo: 1000 });
 });
 
 test('parar cancela timers e ignora eventos', (t) => {
@@ -284,4 +285,51 @@ test('presente de quem não tem @ nem nome não se perde', (t) => {
   assert.equal(cartoes()[0].tipo, 'presente');
   assert.equal(typeof cartoes()[0].usuario.arroba, 'string');
   assert.equal(de('registro').length, 1);
+});
+
+test('mural: presente entra quando o cartão dourado aparece, mais recente primeiro', (t) => {
+  const { diretor, de } = novo(t);
+  diretor.receber(p('ana'));
+  assert.deepEqual(de('agradecidos').at(-1), { canal: 'agradecidos', arrobas: ['ana'] });
+  diretor.receber(p('bia'));
+  assert.equal(de('agradecidos').length, 1, 'bia ainda espera o cartão de ana acabar');
+  t.mock.timers.tick(12000);
+  assert.deepEqual(de('agradecidos').at(-1).arrobas, ['bia', 'ana']);
+});
+
+test('mural: cada pessoa uma vez só, no máximo 5', (t) => {
+  const { diretor, de } = novo(t);
+  for (const id of ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a2']) {
+    diretor.receber(p(id));
+    t.mock.timers.tick(12000);
+  }
+  assert.deepEqual(de('agradecidos').at(-1).arrobas, ['a2', 'a6', 'a5', 'a4', 'a3']);
+});
+
+test('mural: anônimo não entra', (t) => {
+  const { diretor, de } = novo(t);
+  diretor.receber(p('idiota'));
+  assert.equal(de('cartao').at(-1).usuario.arroba, 'anônimo');
+  assert.equal(de('agradecidos').length, 0);
+});
+
+test('mural: @ longo vai cortado como no cartão', (t) => {
+  const { diretor, de } = novo(t);
+  diretor.receber(p('l', { arroba: 'b'.repeat(30) }));
+  assert.deepEqual(de('agradecidos').at(-1).arrobas, ['b'.repeat(21) + '…']);
+});
+
+test('mural: reiniciar zera a lista', (t) => {
+  const { diretor, de } = novo(t);
+  diretor.receber(p('ana'));
+  diretor.reiniciar();
+  assert.deepEqual(de('agradecidos').at(-1).arrobas, []);
+  diretor.receber(p('bia'));
+  assert.deepEqual(de('agradecidos').at(-1).arrobas, ['bia']);
+});
+
+test('curtidas informam o passo da meta configurada', (t) => {
+  const { diretor, de } = novo(t, { metaCurtidas: 500 });
+  diretor.receber(k(10));
+  assert.deepEqual(de('curtidas').at(-1), { canal: 'curtidas', total: 10, meta: 500, passo: 500 });
 });

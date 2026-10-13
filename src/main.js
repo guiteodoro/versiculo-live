@@ -49,6 +49,7 @@ let estadoAtual = { estado: 'desligado', arroba: '', ativo: false };
 let tamanhoFila = 0;
 let avisoAtual = '';
 let ultimasCurtidas = null; // última barra de curtidas enviada à tela
+let ultimosAgradecidos = null; // último mural enviado à tela
 const registros = [];
 
 const p2 = (n) => String(n).padStart(2, '0');
@@ -99,7 +100,9 @@ function mostrar(msg) {
     case 'cartao':
     case 'faixa':
     case 'curtidas':
+    case 'agradecidos':
       if (msg.canal === 'curtidas') ultimasCurtidas = msg;
+      if (msg.canal === 'agradecidos') ultimosAgradecidos = msg;
       enviar(tela, 'vl:aoMostrar', msg);
       break;
     case 'registro': {
@@ -241,7 +244,8 @@ function abrirTela() {
   tela.on('page-title-updated', (e) => e.preventDefault());
   tela.webContents.on('did-finish-load', () => {
     // barra de curtidas sempre visível, mesmo antes da primeira curtida
-    enviar(tela, 'vl:aoMostrar', ultimasCurtidas ?? { canal: 'curtidas', total: 0, meta: config.metaCurtidas });
+    enviar(tela, 'vl:aoMostrar', ultimasCurtidas ?? { canal: 'curtidas', total: 0, meta: config.metaCurtidas, passo: config.metaCurtidas });
+    if (ultimosAgradecidos) enviar(tela, 'vl:aoMostrar', ultimosAgradecidos);
   });
   tela.on('closed', () => {
     tela = null;
